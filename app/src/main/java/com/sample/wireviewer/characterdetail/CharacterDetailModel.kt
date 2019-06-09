@@ -9,8 +9,10 @@ class CharacterDetailModel(private val characterDetailPresenter: CharacterDetail
     var realm : Realm? = null
 
     private fun initRealm() {
-        Realm.init(context)
-        realm = Realm.getDefaultInstance()
+        if (realm == null) {
+            Realm.init(context)
+            realm = Realm.getDefaultInstance()
+        }
     }
     override fun getWireCharacter(tagInfo: String) {
         initRealm()

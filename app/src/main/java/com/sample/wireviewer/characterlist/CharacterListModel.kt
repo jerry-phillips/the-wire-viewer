@@ -26,8 +26,10 @@ class CharacterListModel(private val presenter: CharacterListPresenter):Characte
     private val service = retrofit.create<DuckDuckGoService>(DuckDuckGoService::class.java)
 
     private fun initRealm() {
-        Realm.init(context)
-        realm = Realm.getDefaultInstance()
+        if(realm == null) {
+            Realm.init(context)
+            realm = Realm.getDefaultInstance()
+        }
     }
 
     override fun getData() {
