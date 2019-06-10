@@ -1,6 +1,7 @@
 package com.sample.wireviewer.characterlist
 
 import com.sample.wireviewer.poko.RelatedTopic
+import com.sample.wireviewer.poko.RequestData
 import io.realm.RealmList
 
 class CharacterListContract {
@@ -15,6 +16,7 @@ class CharacterListContract {
         fun getData()
         fun updateDataSource(wireFrames: RealmList<RelatedTopic>)
         fun failedRespone()
+        fun processData(data: RequestData)
         fun queryCharacters(query: String)
         fun closeRealm()
         fun noResults()
@@ -24,5 +26,6 @@ class CharacterListContract {
         fun getData()
         fun queryWireFrame(query: String)
         fun closeRealm()
+        fun saveData(results:RealmList<RelatedTopic>)
     }
 }

@@ -2,9 +2,11 @@ package com.sample.wireviewer.characterlist
 
 import android.content.Context
 import com.sample.wireviewer.poko.RelatedTopic
+import com.sample.wireviewer.poko.RequestData
 import io.realm.RealmList
 
 class CharacterListPresenter(val context: Context, private val characterListView: CharacterListContract.WireListView):CharacterListContract.WireListPresenter {
+
 
     private val characterListModel = CharacterListModel(this)
     override fun getData() {
@@ -30,5 +32,15 @@ class CharacterListPresenter(val context: Context, private val characterListView
 
     override fun noResults() {
         characterListView.noResults()
+    }
+
+    override fun processData(data: RequestData) {
+        val results : RealmList<RelatedTopic> = RealmList()
+        for (character in data.getRelatedTopics()!!) {
+            character.setName(character.getText() as String)
+            character.setDescription(character.getText() as String)
+            results.add(character)
+        }
+        characterListModel.saveData(results)
     }
 }

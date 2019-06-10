@@ -14,7 +14,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class CharacterListModel(private val presenter: CharacterListPresenter):CharacterListContract.WireListModel {
 
-
     private val context = presenter.context
 
     private var realm: Realm? = null
@@ -40,20 +39,7 @@ class CharacterListModel(private val presenter: CharacterListPresenter):Characte
             service.getWireCharacters(WIREFRAMEQUERY, DATAFORMAT).enqueue(object : Callback<RequestData> {
                 override fun onResponse(call: Call<RequestData>, response: Response<RequestData>) {
                     val requestData = response.body()
-                    for (character in requestData!!.getRelatedTopics()!!) {
-                        character.setName(character.getText() as String)
-                        character.setDescription(character.getText() as String)
-                    }
-                    requestData.getRelatedTopics()?.let { results.addAll(it) }
-                    try {
-                        realm?.executeTransaction(Realm.Transaction { realm -> realm.insertOrUpdate(results) })
-                    } finally {
-                        if (realm != null) {
-                            closeRealm()
-                        }
-                    }
-                    presenter.updateDataSource(results)
-
+                    presenter.processData(requestData as RequestData)
                 }
 
                 override fun onFailure(call: Call<RequestData>, t: Throwable) {
@@ -98,5 +84,15 @@ class CharacterListModel(private val presenter: CharacterListPresenter):Characte
         const val WIREFRAMEQUERY = "the wire characters"
         const val DATAFORMAT = "json"
         const val TEXT = "text"
+    }
+
+    override fun saveData(results:RealmList<RelatedTopic>) {
+        try {
+            realm?.executeTransaction{ realm -> realm.insertOrUpdate(results) }
+        } catch (e: java.lang.Exception) {
+            presenter.failedRespone()
+        }
+        presenter.updateDataSource(results)
+
     }
 }
