@@ -83,8 +83,8 @@ class CharacterListModel(private val presenter: CharacterListPresenter):Characte
                     presenter.noResults()
                 }
             })
-        } finally {
-            closeRealm()
+        } catch (e:Exception) {
+            presenter.failedRespone()
         }
 
     }
