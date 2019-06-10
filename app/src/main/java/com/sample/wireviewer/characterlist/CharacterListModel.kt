@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class CharacterListModel(private val presenter: CharacterListPresenter):CharacterListContract.WireListModel {
 
-    private val context = presenter.context
+    private val context = presenter.getContext()
 
     private var realm: Realm? = null
 

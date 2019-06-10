@@ -5,8 +5,10 @@ import com.sample.wireviewer.poko.RelatedTopic
 import com.sample.wireviewer.poko.RequestData
 import io.realm.RealmList
 
-class CharacterListPresenter(val context: Context, private val characterListView: CharacterListContract.WireListView):CharacterListContract.WireListPresenter {
-
+class CharacterListPresenter(private val characterListView: CharacterListContract.WireListView):CharacterListContract.WireListPresenter {
+    override fun getContext(): Context {
+        return characterListView.getViewContext()
+    }
 
     private val characterListModel = CharacterListModel(this)
     override fun getData() {

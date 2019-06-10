@@ -1,5 +1,6 @@
 package com.sample.wireviewer.characterlist
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -16,7 +17,6 @@ import kotlinx.android.synthetic.main.item_list.*
 
 class CharacterListActivity : AppCompatActivity(), CharacterListContract.WireListView {
 
-
     private var twoPane: Boolean = false
     private lateinit var presenter: CharacterListPresenter
 
@@ -30,7 +30,7 @@ class CharacterListActivity : AppCompatActivity(), CharacterListContract.WireLis
         if (item_detail_container != null) {
             twoPane = true
         }
-        presenter = CharacterListPresenter(this, this)
+        presenter = CharacterListPresenter( this)
         presenter.getData()
     }
 
@@ -90,6 +90,10 @@ class CharacterListActivity : AppCompatActivity(), CharacterListContract.WireLis
         val wiggle = AnimationUtils.loadAnimation(this, R.anim.wiggle)
         val search = window.decorView.findViewById<View>(android.R.id.content).findViewById<View>(R.id.action_search)
         search.startAnimation(wiggle)
+    }
+
+    override fun getViewContext(): Context {
+        return this
     }
 
 }

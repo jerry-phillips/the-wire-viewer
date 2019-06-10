@@ -3,7 +3,11 @@ package com.sample.wireviewer.characterdetail
 import android.content.Context
 import com.sample.wireviewer.poko.RelatedTopic
 
-class CharacterDetailPresenter(val context: Context, private val characterDetailView: CharacterDetailContract.WireDetailView): CharacterDetailContract.WireDetailPresenter {
+class CharacterDetailPresenter( private val characterDetailView: CharacterDetailContract.WireDetailView): CharacterDetailContract.WireDetailPresenter {
+    override fun getContext(): Context {
+        return characterDetailView.getViewContext()
+    }
+
     override fun failedRespone() {
        characterDetailView.failedResponse()
     }

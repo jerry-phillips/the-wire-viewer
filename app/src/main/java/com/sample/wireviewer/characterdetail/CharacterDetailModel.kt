@@ -5,7 +5,7 @@ import io.realm.Realm
 
 class CharacterDetailModel(private val characterDetailPresenter: CharacterDetailPresenter):CharacterDetailContract.WireDetailModel {
 
-    val context = characterDetailPresenter.context
+    val context = characterDetailPresenter.getContext()
     var realm : Realm? = null
 
     private fun initRealm() {

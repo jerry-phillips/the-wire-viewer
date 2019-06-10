@@ -1,5 +1,6 @@
 package com.sample.wireviewer.characterdetail
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
@@ -16,7 +17,6 @@ import kotlinx.android.synthetic.main.item_detail.view.*
 
 
 class CharacterDetailFragment : Fragment(), CharacterDetailContract.WireDetailView {
-
 
     private lateinit var wireCharacterTag: String
     private lateinit var characterDetailPresenter: CharacterDetailPresenter
@@ -38,7 +38,7 @@ class CharacterDetailFragment : Fragment(), CharacterDetailContract.WireDetailVi
         arguments?.let {
             if (it.containsKey(ARG_CHARACTER_ID)) {
                 wireCharacterTag = it.getString(ARG_CHARACTER_ID)
-                characterDetailPresenter = activity?.let { it1 -> CharacterDetailPresenter(it1, this)} as CharacterDetailPresenter
+                characterDetailPresenter = CharacterDetailPresenter(this)
 
             } else {
                failedResponse()
@@ -68,6 +68,11 @@ class CharacterDetailFragment : Fragment(), CharacterDetailContract.WireDetailVi
         val dialog: AlertDialog? = builder?.create()
         dialog?.show()
     }
+
+    override fun getViewContext(): Context {
+        return activity as Context
+    }
+
 
 
     companion object {
