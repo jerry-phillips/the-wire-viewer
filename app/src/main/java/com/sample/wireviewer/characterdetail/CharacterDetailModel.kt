@@ -25,7 +25,9 @@ class CharacterDetailModel(private val characterDetailPresenter: CharacterDetail
     }
 
     override fun closeRealm() {
-        realm?.close()
+        if (realm != null) {
+            realm?.close()
+        }
     }
 
     companion object{
