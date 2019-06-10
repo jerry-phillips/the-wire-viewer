@@ -19,8 +19,8 @@ class CharacterDetailModel(private val characterDetailPresenter: CharacterDetail
         try {
             val wireCharacters = realm?.where(RelatedTopic::class.java)?.equalTo(WIREFRAMETAG, tagInfo)?.findFirst()
             characterDetailPresenter.updateView(wireCharacters as RelatedTopic)
-        } finally {
-            closeRealm()
+        } catch (e:Exception) {
+            characterDetailPresenter.failedRespone()
         }
     }
 

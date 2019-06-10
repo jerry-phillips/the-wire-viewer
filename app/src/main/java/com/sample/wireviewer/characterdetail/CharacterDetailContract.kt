@@ -6,11 +6,13 @@ interface CharacterDetailContract {
 
     interface WireDetailView {
         fun updateView(wireFrame: RelatedTopic)
+        fun failedResponse()
     }
 
     interface WireDetailPresenter {
         fun updateView(wireFrame: RelatedTopic)
         fun getCharacter(tagInfo: String)
+        fun failedRespone()
         fun closeRealm()
     }
 

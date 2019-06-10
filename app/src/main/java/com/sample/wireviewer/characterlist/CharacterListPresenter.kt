@@ -4,9 +4,9 @@ import android.content.Context
 import com.sample.wireviewer.poko.RelatedTopic
 import io.realm.RealmList
 
-class CharacterListPresenter(val context: Context, val characterListView: CharacterListContract.WireListView):CharacterListContract.WireListPresenter {
+class CharacterListPresenter(val context: Context, private val characterListView: CharacterListContract.WireListView):CharacterListContract.WireListPresenter {
 
-    val characterListModel = CharacterListModel(this)
+    private val characterListModel = CharacterListModel(this)
     override fun getData() {
         characterListView.showProgress(true)
         characterListModel.getData()

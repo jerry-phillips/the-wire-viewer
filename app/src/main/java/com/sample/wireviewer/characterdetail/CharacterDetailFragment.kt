@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.item_detail.view.*
 
 class CharacterDetailFragment : Fragment(), CharacterDetailContract.WireDetailView {
 
+
     private lateinit var wireCharacterTag: String
     private lateinit var characterDetailPresenter: CharacterDetailPresenter
     private lateinit var characterImageView: ImageView
@@ -40,14 +41,7 @@ class CharacterDetailFragment : Fragment(), CharacterDetailContract.WireDetailVi
                 characterDetailPresenter = activity?.let { it1 -> CharacterDetailPresenter(it1, this)} as CharacterDetailPresenter
 
             } else {
-                val builder = activity?.let { it1 -> AlertDialog.Builder(it1) }
-                builder?.setTitle(getString(R.string.failure))
-                builder?.setMessage(getString(R.string.somethingwentwrong))
-                builder?.setNeutralButton(getString(android.R.string.ok)){dialog,_ ->
-                    dialog.dismiss()
-                }
-                val dialog: AlertDialog? = builder?.create()
-                dialog?.show()
+               failedResponse()
             }
         }
     }
@@ -64,6 +58,17 @@ class CharacterDetailFragment : Fragment(), CharacterDetailContract.WireDetailVi
 
         return rootView
     }
+    override fun failedResponse() {
+        val builder = activity?.let { it1 -> AlertDialog.Builder(it1) }
+        builder?.setTitle(getString(R.string.failure))
+        builder?.setMessage(getString(R.string.somethingwentwrong))
+        builder?.setNeutralButton(getString(android.R.string.ok)){dialog,_ ->
+            dialog.dismiss()
+        }
+        val dialog: AlertDialog? = builder?.create()
+        dialog?.show()
+    }
+
 
     companion object {
         const val ARG_CHARACTER_ID = "character_id"
