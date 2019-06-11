@@ -7,14 +7,14 @@ class RequestData {
 
     @SerializedName("RelatedTopics")
     @Expose
-    private var relatedTopics: List<RelatedTopic>? = null
+    private var characters: List<Character>? = null
 
 
-    fun getRelatedTopics(): List<RelatedTopic>? {
-        return relatedTopics
+    fun getRelatedTopics(): List<Character>? {
+        return characters
     }
 
-    fun setRelatedTopics(relatedTopics: List<RelatedTopic>) {
-        this.relatedTopics = relatedTopics
+    fun setRelatedTopics(characters: List<Character>) {
+        this.characters = characters
     }
 }

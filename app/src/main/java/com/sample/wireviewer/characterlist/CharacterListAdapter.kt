@@ -10,13 +10,12 @@ import android.widget.TextView
 import com.sample.wireviewer.R
 import com.sample.wireviewer.characterdetail.CharacterDetailActivity
 import com.sample.wireviewer.characterdetail.CharacterDetailFragment
-import com.sample.wireviewer.poko.RelatedTopic
-import io.realm.RealmList
+import com.sample.wireviewer.poko.Character
 import kotlinx.android.synthetic.main.item_list_content.view.*
 
 class CharacterListAdapter(
     private val parentActivity: CharacterListActivity,
-    private val wireFrames: RealmList<RelatedTopic>,
+    private val characters: List<Character>,
     private val twoPane: Boolean
 ) :
     RecyclerView.Adapter<CharacterListAdapter.ViewHolder>() {
@@ -25,11 +24,12 @@ class CharacterListAdapter(
 
     init {
         onClickListener = View.OnClickListener { v ->
-            val wireFrame = v.tag as RelatedTopic
+            val wireCharacter = v.tag as Character
+
             if (twoPane) {
                 val fragment = CharacterDetailFragment().apply {
                     arguments = Bundle().apply {
-                        putString(CharacterDetailFragment.ARG_CHARACTER_ID, wireFrame.getFirstURL())
+                        putParcelable(CharacterDetailFragment.ARG_CHARACTER, wireCharacter)
                     }
                 }
                 parentActivity.supportFragmentManager
@@ -38,7 +38,7 @@ class CharacterListAdapter(
                     .commit()
             } else {
                 val intent = Intent(v.context, CharacterDetailActivity::class.java).apply {
-                    putExtra(CharacterDetailFragment.ARG_CHARACTER_ID, wireFrame.getFirstURL())
+                    putExtra(CharacterDetailFragment.ARG_CHARACTER, wireCharacter)
                 }
                 v.context.startActivity(intent)
             }
@@ -52,7 +52,7 @@ class CharacterListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val wireFrame = wireFrames[position]
+        val wireFrame = characters[position]
         holder.idView.text = wireFrame?.gettName()
 
         with(holder.itemView) {
@@ -61,7 +61,7 @@ class CharacterListAdapter(
         }
     }
 
-    override fun getItemCount() = wireFrames.size
+    override fun getItemCount() = characters.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val idView: TextView = view.id_text

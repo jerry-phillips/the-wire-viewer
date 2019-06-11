@@ -21,9 +21,9 @@ class CharacterDetailActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             val fragment = CharacterDetailFragment().apply {
                 arguments = Bundle().apply {
-                    putString(
-                        CharacterDetailFragment.ARG_CHARACTER_ID,
-                        intent.getStringExtra(CharacterDetailFragment.ARG_CHARACTER_ID)
+                    putParcelable(
+                        CharacterDetailFragment.ARG_CHARACTER,
+                        intent.getParcelableExtra(CharacterDetailFragment.ARG_CHARACTER)
                     )
                 }
             }

@@ -1,10 +1,11 @@
 package com.sample.wireviewer.poko
 
+import android.os.Parcel
+import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import io.realm.RealmObject
 
-open class Icon: RealmObject() {
+class Icon() :Parcelable {
 
     @SerializedName("URL")
     @Expose
@@ -15,6 +16,12 @@ open class Icon: RealmObject() {
     @SerializedName("Width")
     @Expose
     private var width: String? = null
+
+    constructor(parcel: Parcel) : this() {
+        uRL = parcel.readString()
+        height = parcel.readString()
+        width = parcel.readString()
+    }
 
     fun getURL(): String? {
         return uRL
@@ -38,6 +45,26 @@ open class Icon: RealmObject() {
 
     fun setWidth(width: String) {
         this.width = width
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(uRL)
+        parcel.writeString(height)
+        parcel.writeString(width)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Icon> {
+        override fun createFromParcel(parcel: Parcel): Icon {
+            return Icon(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Icon?> {
+            return arrayOfNulls(size)
+        }
     }
 
 }
