@@ -19,6 +19,8 @@ class CharacterListActivity : AppCompatActivity(){
 
     private var twoPane: Boolean = false
     private lateinit var modelList:CharacterListViewModel
+    private lateinit var searchView:SearchView
+    private lateinit var searchQuery:CharSequence
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,24 +32,24 @@ class CharacterListActivity : AppCompatActivity(){
         if (item_detail_container != null) {
             twoPane = true
         }
-        showProgress(true)
         modelList = ViewModelProviders.of(this).get(CharacterListViewModel::class.java)
-        getCharactersFromViewModel()
+        if (savedInstanceState?.getCharSequence(QUERYVALUE) != null){
+            searchQuery = savedInstanceState.getCharSequence(QUERYVALUE) as CharSequence
+        } else {
+            showProgress(true)
+            getCharactersFromViewModel()
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.search, menu)
-        val searchView = menu?.findItem(R.id.action_search)?.actionView as SearchView
+        searchView = menu?.findItem(R.id.action_search)?.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
+                searchQuery = searchView.query
                 if (query.length > 2) {
-                    modelList.queryCharacters(query).observe(this@CharacterListActivity, Observer<List<Character>>{ characters ->
-                        if (characters!!.isEmpty()){
-                            noResults()
-                        } else{
-                            setupRecyclerView(characters)
-                        }
-                    })
+                   queryCharactersFromModel(query)
                 }
                 return false
             }
@@ -55,10 +57,16 @@ class CharacterListActivity : AppCompatActivity(){
             override fun onQueryTextChange(newText: String): Boolean {
                 if (newText.isEmpty()) {
                    getCharactersFromViewModel()
+                    searchView.isIconified = true
                 }
                 return false
             }
         })
+        if (::searchQuery.isInitialized && searchQuery.isNotEmpty()) {
+            searchView.setQuery(searchQuery, true)
+            searchView.isIconified = false
+            searchView.clearFocus()
+        }
         return true
     }
     private fun setupRecyclerView( characters:List<Character>) {
@@ -105,5 +113,24 @@ class CharacterListActivity : AppCompatActivity(){
         })
     }
 
+    private fun queryCharactersFromModel(query:String){
+        modelList.queryCharacters(query).observe(this@CharacterListActivity, Observer<List<Character>>{ characters ->
+            if (characters!!.isEmpty()){
+                noResults()
+            } else{
+                setupRecyclerView(characters)
+            }
+        })
+    }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        if(searchView.query.isNotEmpty()) {
+            outState?.putCharSequence(QUERYVALUE, searchView.query)
+        }
+    }
+
+    companion object{
+        const val QUERYVALUE ="queryValue"
+    }
 }
