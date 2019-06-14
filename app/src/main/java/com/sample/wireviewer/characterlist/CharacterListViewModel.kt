@@ -1,8 +1,8 @@
 package com.sample.wireviewer.characterlist
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.sample.wireviewer.interfaces.DuckDuckGoService
 import com.sample.wireviewer.poko.Character
 import com.sample.wireviewer.poko.RequestData

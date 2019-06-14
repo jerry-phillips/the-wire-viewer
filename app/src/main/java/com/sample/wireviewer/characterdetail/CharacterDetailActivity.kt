@@ -2,8 +2,8 @@ package com.sample.wireviewer.characterdetail
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import com.sample.wireviewer.R
 import com.sample.wireviewer.characterlist.CharacterListActivity
 import kotlinx.android.synthetic.main.activity_item_detail.*

@@ -1,10 +1,11 @@
 package com.sample.wireviewer.characterdetail
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AlertDialog
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.sample.wireviewer.R
 import com.sample.wireviewer.poko.Character
