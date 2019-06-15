@@ -4,14 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sample.wireviewer.poko.Character
+import com.sample.wireviewer.services.Resource
 
 class CharacterListViewModel: ViewModel() {
    
     private val characterListRepository = CharacterListRepository()
-    private val characters: LiveData<List<Character>> = characterListRepository.getCharacters()
+    private val characters: LiveData<Resource<List<Character>>> = characterListRepository.getCharacters()
 
 
-    fun getCharacters(): LiveData<List<Character>> {
+    fun getCharacters(): LiveData<Resource<List<Character>>> {
         return characters
     }
 
@@ -19,7 +20,7 @@ class CharacterListViewModel: ViewModel() {
      fun queryCharacters(query: String):LiveData<List<Character>> {
         val queryResults = MutableLiveData<List<Character>>()
          val tempResults = mutableListOf<Character>()
-        val iterator = characters.value?.listIterator()
+        val iterator = characters.value?.data?.listIterator()
         if (iterator != null) {
             for (character in iterator){
                 if (character.getText()?.contains(query, true) as Boolean){

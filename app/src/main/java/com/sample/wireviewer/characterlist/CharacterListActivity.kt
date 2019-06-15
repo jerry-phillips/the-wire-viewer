@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.sample.wireviewer.R
 import com.sample.wireviewer.poko.Character
+import com.sample.wireviewer.services.Resource
 import kotlinx.android.synthetic.main.activity_item_list.*
 import kotlinx.android.synthetic.main.item_list.*
 
@@ -103,10 +104,10 @@ class CharacterListActivity : AppCompatActivity(){
     }
 
     private fun getCharactersFromViewModel(){
-        modelList.getCharacters().observe(this, Observer<List<Character>>{ characters ->
+        modelList.getCharacters().observe(this, Observer<Resource<List<Character>>>{ characters ->
             showProgress(false)
-            if (characters?.isNotEmpty() as Boolean) {
-                 setupRecyclerView(characters)
+            if (characters.data != null) {
+                 setupRecyclerView(characters.data)
             } else {
                 failedResponse()
             }

@@ -31,7 +31,6 @@ class Character() :Parcelable {
         description = parcel.readString()
     }
 
-
     fun getIcon(): Icon? {
         return icon
     }
@@ -60,31 +59,19 @@ class Character() :Parcelable {
         return text
     }
 
-    fun setText(text: String) {
-        this.text = text
-    }
 
     fun gettName(): String? {
+        val separated = this.text!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        this.name = separated[0].trim { it <= ' ' }
         return name
 
     }
 
-    fun setName(name: String) {
-        var name = name
-        val separated = name.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        name = separated[0].trim { it <= ' ' }
-        this.name = name
-    }
-
-    fun setDescription(description: String) {
-        var description = description
-        val separated = description.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        description = separated[separated.size.minus(1)].trim { it <= ' ' }
-        this.description = description
-    }
 
     fun getDescription(): String? {
-        return this.description
+        val separated = this.text!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        this.description = separated[separated.size.minus(1)].trim { it <= ' ' }
+        return description
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

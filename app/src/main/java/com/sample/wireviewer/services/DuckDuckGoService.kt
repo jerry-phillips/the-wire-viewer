@@ -1,4 +1,4 @@
-package com.sample.wireviewer.interfaces
+package com.sample.wireviewer.services
 
 import com.sample.wireviewer.poko.RequestData
 import retrofit2.Call
