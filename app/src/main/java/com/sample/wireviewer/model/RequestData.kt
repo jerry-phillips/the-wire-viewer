@@ -1,4 +1,4 @@
-package com.sample.wireviewer.poko
+package com.sample.wireviewer.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
@@ -12,9 +12,5 @@ class RequestData {
 
     fun getRelatedTopics(): List<Character>? {
         return characters
-    }
-
-    fun setRelatedTopics(characters: List<Character>) {
-        this.characters = characters
     }
 }

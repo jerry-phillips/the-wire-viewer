@@ -6,15 +6,16 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.sample.wireviewer.R
 import com.sample.wireviewer.characterlist.CharacterListActivity
-import kotlinx.android.synthetic.main.activity_item_detail.*
-
+import com.sample.wireviewer.databinding.ActivityItemDetailBinding
+import com.sample.wireviewer.model.Character
 
 class CharacterDetailActivity : AppCompatActivity() {
-
+    private lateinit var binding: ActivityItemDetailBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_item_detail)
-        setSupportActionBar(detail_toolbar)
+        binding = ActivityItemDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.detailToolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -22,8 +23,8 @@ class CharacterDetailActivity : AppCompatActivity() {
             val fragment = CharacterDetailFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(
-                        CharacterDetailFragment.ARG_CHARACTER,
-                        intent.getParcelableExtra(CharacterDetailFragment.ARG_CHARACTER)
+                        ARG_CHARACTER,
+                        intent.extras?.getParcelable(ARG_CHARACTER)
                     )
                 }
             }

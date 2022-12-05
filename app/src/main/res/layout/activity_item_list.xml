@@ -33,7 +33,10 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:id="@+id/progressBar" android:layout_gravity="center"/>
-        <include layout="@layout/item_list"/>
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/item_list" />
     </FrameLayout>
 
 
