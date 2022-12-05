@@ -1,4 +1,4 @@
-package com.sample.wireviewer.poko
+package com.sample.wireviewer.model
 
 import android.os.Parcel
 import android.os.Parcelable
@@ -9,42 +9,18 @@ class Icon() :Parcelable {
 
     @SerializedName("URL")
     @Expose
-    private var uRL: String? = null
+    var uRL: String? = null
     @SerializedName("Height")
     @Expose
-    private var height: String? = null
+    var height: String? = null
     @SerializedName("Width")
     @Expose
-    private var width: String? = null
+    var width: String? = null
 
     constructor(parcel: Parcel) : this() {
         uRL = parcel.readString()
         height = parcel.readString()
         width = parcel.readString()
-    }
-
-    fun getURL(): String? {
-        return uRL
-    }
-
-    fun setURL(uRL: String) {
-        this.uRL = uRL
-    }
-
-    fun getHeight(): String? {
-        return height
-    }
-
-    fun setHeight(height: String) {
-        this.height = height
-    }
-
-    fun getWidth(): String? {
-        return width
-    }
-
-    fun setWidth(width: String) {
-        this.width = width
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -66,5 +42,4 @@ class Icon() :Parcelable {
             return arrayOfNulls(size)
         }
     }
-
 }

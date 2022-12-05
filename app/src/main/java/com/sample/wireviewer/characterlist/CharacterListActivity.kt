@@ -1,39 +1,53 @@
 package com.sample.wireviewer.characterlist
 
+import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.SearchView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.sample.wireviewer.R
-import com.sample.wireviewer.poko.Character
-import com.sample.wireviewer.services.Resource
-import kotlinx.android.synthetic.main.activity_item_list.*
-import kotlinx.android.synthetic.main.item_list.*
+import com.sample.wireviewer.characterdetail.ARG_CHARACTER
+import com.sample.wireviewer.characterdetail.CharacterDetailActivity
+import com.sample.wireviewer.characterdetail.CharacterDetailFragment
+import com.sample.wireviewer.databinding.ActivityItemDetailBinding
+import com.sample.wireviewer.databinding.ActivityItemListBinding
+import com.sample.wireviewer.model.Character
 
+const val QUERYVALUE ="queryValue"
+
+fun AlertDialog.Builder.failureMessage(){
+    val builder = AlertDialog.Builder(context)
+    builder.setTitle(context.getString(R.string.failure))
+    builder.setMessage(context.getString(R.string.something_went_wrong))
+    builder.setNeutralButton(context.getString(android.R.string.ok)){dialog,_ ->
+        dialog.dismiss()
+    }
+    val dialog: AlertDialog = builder.create()
+    dialog.show()
+}
 
 class CharacterListActivity : AppCompatActivity(){
 
-    private var twoPane: Boolean = false
-    private lateinit var modelList:CharacterListViewModel
-    private lateinit var searchView:SearchView
-    private lateinit var searchQuery:CharSequence
+    private val viewModel:CharacterListViewModel by viewModels()
+    private var searchView:SearchView? = null
+    private var searchQuery:CharSequence? = null
+    private lateinit var binding: ActivityItemListBinding
+    private lateinit var detailBinding: ActivityItemDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_item_list)
+        binding = ActivityItemListBinding.inflate(layoutInflater)
+        detailBinding = ActivityItemDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        setSupportActionBar(toolbar)
-        toolbar.title = title
+        setSupportActionBar(binding.toolbar)
+        binding.toolbar.title = title
 
-        if (item_detail_container != null) {
-            twoPane = true
-        }
-        modelList = ViewModelProviders.of(this).get(CharacterListViewModel::class.java)
         if (savedInstanceState?.getCharSequence(QUERYVALUE) != null){
             searchQuery = savedInstanceState.getCharSequence(QUERYVALUE) as CharSequence
         } else {
@@ -46,9 +60,9 @@ class CharacterListActivity : AppCompatActivity(){
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.search, menu)
         searchView = menu?.findItem(R.id.action_search)?.actionView as SearchView
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                searchQuery = searchView.query
+                searchQuery = searchView?.query
                 if (query.length > 2) {
                    queryCharactersFromModel(query)
                 }
@@ -58,43 +72,50 @@ class CharacterListActivity : AppCompatActivity(){
             override fun onQueryTextChange(newText: String): Boolean {
                 if (newText.isEmpty()) {
                    getCharactersFromViewModel()
-                    searchView.isIconified = true
+                    searchView?.isIconified = true
                 }
                 return false
             }
         })
-        if (::searchQuery.isInitialized && searchQuery.isNotEmpty()) {
-            searchView.setQuery(searchQuery, true)
-            searchView.isIconified = false
-            searchView.clearFocus()
+        if (searchQuery?.isNotEmpty() == true) {
+            searchView?.apply {
+                setQuery(searchQuery, true)
+                isIconified = false
+                clearFocus()
+            }
         }
         return true
     }
     private fun setupRecyclerView( characters:List<Character>) {
-        item_list.adapter = CharacterListAdapter(
-            this,
-            characters,
-            twoPane
-        )
+        binding.include.itemList.adapter = CharacterListAdapter(
+            characters
+        ) { wireCharacter ->
+
+            binding.toolbar.title = wireCharacter.getCharacterName()
+            if (isTablet()) {
+                val fragment = CharacterDetailFragment().apply {
+                    arguments = Bundle().apply {
+                        putParcelable(ARG_CHARACTER, wireCharacter)
+                    }
+                }
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.item_detail_container, fragment)
+                    .commit()
+            } else {
+                val intent = Intent(this, CharacterDetailActivity::class.java).apply {
+                    putExtra(ARG_CHARACTER, wireCharacter)
+                }
+                this.startActivity(intent)
+            }
+        }
     }
     private fun showProgress(isShowingProgress: Boolean) {
         if(isShowingProgress) {
-            progressBar.visibility = View.VISIBLE
+            binding.progressBar.visibility = View.VISIBLE
         } else{
-            progressBar.visibility = View.GONE}
+            binding.progressBar.visibility = View.GONE}
 
-    }
-
-
-     private fun failedResponse() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(getString(R.string.failure))
-        builder.setMessage(getString(R.string.somethingwentwrong))
-        builder.setNeutralButton(getString(android.R.string.ok)){dialog,_ ->
-            dialog.dismiss()
-        }
-        val dialog: AlertDialog? = builder.create()
-        dialog?.show()
     }
 
    private fun noResults() {
@@ -104,34 +125,37 @@ class CharacterListActivity : AppCompatActivity(){
     }
 
     private fun getCharactersFromViewModel(){
-        modelList.getCharacters().observe(this, Observer<Resource<List<Character>>>{ characters ->
+        viewModel.getCharacters().observe(this) { characters ->
             showProgress(false)
             if (characters.data != null) {
-                 setupRecyclerView(characters.data)
+                setupRecyclerView(characters.data)
             } else {
-                failedResponse()
+                val dialog = AlertDialog.Builder(this)
+                dialog.failureMessage()
             }
-        })
-    }
-
-    private fun queryCharactersFromModel(query:String){
-        modelList.queryCharacters(query).observe(this@CharacterListActivity, Observer<List<Character>>{ characters ->
-            if (characters!!.isEmpty()){
-                noResults()
-            } else{
-                setupRecyclerView(characters)
-            }
-        })
-    }
-
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
-        if(searchView.query.isNotEmpty()) {
-            outState?.putCharSequence(QUERYVALUE, searchView.query)
         }
     }
 
-    companion object{
-        const val QUERYVALUE ="queryValue"
+    private fun queryCharactersFromModel(query:String){
+        viewModel.queryCharacters(query).observe(this@CharacterListActivity) { characters ->
+            if (characters!!.isEmpty()) {
+                noResults()
+            } else {
+                setupRecyclerView(characters)
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        if(searchView?.query?.isNotEmpty() == true) {
+            outState.putCharSequence(QUERYVALUE, searchView?.query)
+        }
+    }
+
+    private fun isTablet(): Boolean {
+        return ((resources.configuration.screenLayout
+                and Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE)
     }
 }
