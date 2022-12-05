@@ -3,25 +3,28 @@ package com.sample.wireviewer.characterlist
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.sample.wireviewer.model.Character
-import com.sample.wireviewer.services.Resource
+import kotlinx.coroutines.launch
 
 class CharacterListViewModel(
     characterListRepository: CharacterListRepository = CharacterListRepository()
 ) : ViewModel() {
 
-    private val characters: LiveData<Resource<List<Character>>> =
-        characterListRepository.getCharacters()
+    val characters = MutableLiveData<List<Character>?>()
 
-    fun getCharacters(): LiveData<Resource<List<Character>>> {
-        return characters
+    init {
+        viewModelScope.launch {
+            characters.value = characterListRepository.getCharacters().data
+        }
     }
+
 
 
     fun queryCharacters(query: String): LiveData<List<Character>> {
         val queryResults = MutableLiveData<List<Character>>()
         val tempResults = mutableListOf<Character>()
-        val iterator = characters.value?.data?.listIterator()
+        val iterator = characters.value?.listIterator()
         if (iterator != null) {
             for (character in iterator) {
                 if (character.text?.contains(query, true) as Boolean) {

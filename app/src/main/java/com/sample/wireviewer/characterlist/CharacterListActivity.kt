@@ -52,7 +52,7 @@ class CharacterListActivity : AppCompatActivity(){
             searchQuery = savedInstanceState.getCharSequence(QUERYVALUE) as CharSequence
         } else {
             showProgress(true)
-            getCharactersFromViewModel()
+            observeCharactersFromViewModel()
         }
 
     }
@@ -71,7 +71,7 @@ class CharacterListActivity : AppCompatActivity(){
 
             override fun onQueryTextChange(newText: String): Boolean {
                 if (newText.isEmpty()) {
-                   getCharactersFromViewModel()
+                   observeCharactersFromViewModel()
                     searchView?.isIconified = true
                 }
                 return false
@@ -124,11 +124,11 @@ class CharacterListActivity : AppCompatActivity(){
         search.startAnimation(wiggle)
     }
 
-    private fun getCharactersFromViewModel(){
-        viewModel.getCharacters().observe(this) { characters ->
+    private fun observeCharactersFromViewModel(){
+        viewModel.characters.observe(this) { characters ->
             showProgress(false)
-            if (characters.data != null) {
-                setupRecyclerView(characters.data)
+            if (!characters.isNullOrEmpty()) {
+                setupRecyclerView(characters)
             } else {
                 val dialog = AlertDialog.Builder(this)
                 dialog.failureMessage()
