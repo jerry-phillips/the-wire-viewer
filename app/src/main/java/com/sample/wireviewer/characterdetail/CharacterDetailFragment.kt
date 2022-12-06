@@ -26,8 +26,7 @@ class CharacterDetailFragment : Fragment() {
                 selectedCharacter = it.getParcelable(ARG_CHARACTER)
                 activity?.title = selectedCharacter?.getCharacterName()
             } else {
-                val alertDialog = AlertDialog.Builder(requireContext())
-                alertDialog.failureMessage()
+                AlertDialog.Builder(requireContext()).failureMessage()
             }
         }
     }

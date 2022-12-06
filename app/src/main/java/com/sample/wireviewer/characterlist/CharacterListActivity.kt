@@ -132,8 +132,7 @@ class CharacterListActivity : AppCompatActivity(){
             if (!characters.isNullOrEmpty()) {
                 setupRecyclerView(characters)
             } else {
-                val dialog = AlertDialog.Builder(this)
-                dialog.failureMessage()
+                AlertDialog.Builder(this).failureMessage()
             }
         }
         viewModel.queriedCharacters.observe(this) { characters ->
