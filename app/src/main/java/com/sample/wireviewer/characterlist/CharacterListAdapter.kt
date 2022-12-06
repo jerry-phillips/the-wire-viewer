@@ -34,7 +34,7 @@ class CharacterListAdapter(
 class ListItemViewHolder(private val binding: ViewListItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun onBind(character: Character, onClick: (character: Character) -> Unit) {
-        binding.idText.text = character.text
+        binding.idText.text = character.getCharacterName()
         itemView.setOnClickListener { onClick(character) }
     }
 }

@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sample.wireviewer.model.Character
-import com.sample.wireviewer.services.Resource
+import com.sample.wireviewer.services.DuckDuckGoResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,14 +16,14 @@ class CharacterListViewModel @Inject constructor(
 
     val characters = MutableLiveData<List<Character>?>()
     val queriedCharacters = MutableLiveData<List<Character>>()
-    val error = MutableLiveData<Resource.Error>()
+    val error = MutableLiveData<DuckDuckGoResponse.Error>()
     init {
         viewModelScope.launch {
             val resource = characterListRepository.getCharacters()
-            if (resource is Resource.Success) {
+            if (resource is DuckDuckGoResponse.Success) {
                 characters.value = resource.data
             } else {
-                error.value = resource as Resource.Error
+                error.value = resource as DuckDuckGoResponse.Error
             }
         }
     }

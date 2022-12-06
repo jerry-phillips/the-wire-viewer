@@ -41,7 +41,7 @@ fun <T> LiveData<T>.getOrAwaitValue(
 
 fun <T> LiveData<T?>.requireValue() = value!!
 
-open class BaseTest {
+abstract class BaseTest {
     @Rule
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()

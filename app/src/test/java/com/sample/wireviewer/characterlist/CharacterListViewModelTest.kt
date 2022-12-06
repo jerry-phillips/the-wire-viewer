@@ -1,7 +1,7 @@
 package com.sample.wireviewer.characterlist
 
 import com.sample.wireviewer.model.Character
-import com.sample.wireviewer.services.Resource
+import com.sample.wireviewer.services.DuckDuckGoResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -20,7 +20,7 @@ internal class CharacterListViewModelTest: BaseTest() {
     @Test
     fun `verify character data is set`() {
         runTest {
-            whenever(repository.getCharacters()).thenReturn(Resource.Success(listOf(mock())))
+            whenever(repository.getCharacters()).thenReturn(DuckDuckGoResponse.Success(listOf(mock())))
             subject = CharacterListViewModel(repository)
 
             verify(repository).getCharacters()
@@ -32,7 +32,7 @@ internal class CharacterListViewModelTest: BaseTest() {
     @Test
     fun `verify error is set on error`() {
         runTest {
-            val error = Resource.Error()
+            val error = DuckDuckGoResponse.Error()
             whenever(repository.getCharacters()).thenReturn(error)
             subject = CharacterListViewModel(repository)
 
@@ -46,7 +46,7 @@ internal class CharacterListViewModelTest: BaseTest() {
         runTest {
             val character = Character()
             character.text = "Idris Elba "
-            whenever(repository.getCharacters()).thenReturn(Resource.Success(listOf(character)))
+            whenever(repository.getCharacters()).thenReturn(DuckDuckGoResponse.Success(listOf(character)))
             subject = CharacterListViewModel(repository)
             subject.characters.value = listOf(character)
             subject.queryCharacters("Idris")
