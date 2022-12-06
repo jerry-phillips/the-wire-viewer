@@ -1,6 +1,5 @@
 package com.sample.wireviewer.characterlist
 
-import com.sample.wireviewer.R
 import com.sample.wireviewer.model.Character
 import com.sample.wireviewer.services.DuckDuckGoService
 import com.sample.wireviewer.services.Resource
@@ -11,13 +10,13 @@ const val DATAFORMAT = "json"
 
 class CharacterListRepository @Inject constructor(private val duckGoService: DuckDuckGoService) {
 
-    suspend fun getCharacters(): Resource<List<Character>> {
+    suspend fun getCharacters(): Resource {
         val data = duckGoService.getWireCharacters(WIREFRAMEQUERY, DATAFORMAT)
 
         return if (data.isSuccessful) {
             Resource.Success(data.body()?.getRelatedTopics() as List<Character>)
         } else {
-            Resource.Error(R.string.failure)
+            Resource.Error()
         }
     }
 }

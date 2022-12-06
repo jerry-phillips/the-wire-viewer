@@ -66,14 +66,14 @@ class CharacterListActivity : AppCompatActivity(){
             override fun onQueryTextSubmit(query: String): Boolean {
                 searchQuery = searchView?.query
                 if (query.length > 2) {
-                   queryCharactersFromModel(query)
+                   viewModel.queryCharacters(query)
                 }
                 return false
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
                 if (newText.isEmpty()) {
-                   observeCharactersFromViewModel()
+                    viewModel.characters.value?.let { setupRecyclerView(it) }
                     searchView?.isIconified = true
                 }
                 return false
@@ -136,10 +136,7 @@ class CharacterListActivity : AppCompatActivity(){
                 dialog.failureMessage()
             }
         }
-    }
-
-    private fun queryCharactersFromModel(query:String){
-        viewModel.queryCharacters(query).observe(this@CharacterListActivity) { characters ->
+        viewModel.queriedCharacters.observe(this) { characters ->
             if (characters!!.isEmpty()) {
                 noResults()
             } else {

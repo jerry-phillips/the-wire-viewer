@@ -1,11 +1,8 @@
 package com.sample.wireviewer.services
 
-import androidx.annotation.StringRes
+import com.sample.wireviewer.model.Character
 
-sealed class Resource<T>(
-    val data: T? = null,
-    val message: Int? = null
-) {
-    class Success<T>(data: T) : Resource<T>(data)
-    class Error<T>(@StringRes message: Int, data: T? = null) : Resource<T>(data, message)
+sealed class Resource {
+    class Success(val data: List<Character>) : Resource()
+    class Error: Resource()
 }

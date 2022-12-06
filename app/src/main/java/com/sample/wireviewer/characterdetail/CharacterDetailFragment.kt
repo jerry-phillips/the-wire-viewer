@@ -1,7 +1,6 @@
 package com.sample.wireviewer.characterdetail
 
 import android.os.Bundle
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +37,8 @@ class CharacterDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = ViewItemDetailBinding.inflate(layoutInflater)
-        Glide.with(this).load(selectedCharacter?.icon?.uRL)
+        val imageURL = "https://www.duckduckgo.com" + selectedCharacter?.icon?.uRL
+        Glide.with(this).load(imageURL)
             .placeholder(R.drawable.ic_sphere_wireframe_10deg_6r).into(binding.characterImage)
         binding.characterDescription.text = selectedCharacter?.getCharacterDescription()
         return binding.root

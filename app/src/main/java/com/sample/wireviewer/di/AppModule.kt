@@ -3,6 +3,7 @@ package com.sample.wireviewer.di
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.sample.wireviewer.services.DuckDuckGoService
+import com.sample.wireviewer.services.ENDPOINT
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,7 +24,7 @@ class AppModule {
     @Provides
     @Singleton
     fun provideRetrofit(gson: Gson): Retrofit = Retrofit.Builder()
-        .baseUrl("https://api.duckduckgo.com/")
+        .baseUrl(ENDPOINT)
         .client(OkHttpClient.Builder().also { client ->
             client.connectTimeout(15, TimeUnit.SECONDS)
             client.readTimeout(15, TimeUnit.SECONDS)
