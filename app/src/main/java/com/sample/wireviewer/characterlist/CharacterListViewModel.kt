@@ -5,10 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sample.wireviewer.model.Character
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CharacterListViewModel(
-    characterListRepository: CharacterListRepository = CharacterListRepository()
+@HiltViewModel
+class CharacterListViewModel @Inject constructor(
+    characterListRepository: CharacterListRepository
 ) : ViewModel() {
 
     val characters = MutableLiveData<List<Character>?>()

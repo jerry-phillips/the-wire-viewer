@@ -17,6 +17,7 @@ import com.sample.wireviewer.characterdetail.CharacterDetailFragment
 import com.sample.wireviewer.databinding.ActivityItemDetailBinding
 import com.sample.wireviewer.databinding.ActivityItemListBinding
 import com.sample.wireviewer.model.Character
+import dagger.hilt.android.AndroidEntryPoint
 
 const val QUERYVALUE ="queryValue"
 
@@ -31,6 +32,7 @@ fun AlertDialog.Builder.failureMessage(){
     dialog.show()
 }
 
+@AndroidEntryPoint
 class CharacterListActivity : AppCompatActivity(){
 
     private val viewModel:CharacterListViewModel by viewModels()
