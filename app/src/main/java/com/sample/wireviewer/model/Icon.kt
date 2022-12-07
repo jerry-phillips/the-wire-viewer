@@ -8,21 +8,13 @@ class Icon() :Parcelable {
 
     @SerializedName("URL")
     var uRL: String? = null
-    @SerializedName("Height")
-    var height: String? = null
-    @SerializedName("Width")
-    var width: String? = null
 
     constructor(parcel: Parcel) : this() {
         uRL = parcel.readString()
-        height = parcel.readString()
-        width = parcel.readString()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(uRL)
-        parcel.writeString(height)
-        parcel.writeString(width)
     }
 
     override fun describeContents(): Int {
