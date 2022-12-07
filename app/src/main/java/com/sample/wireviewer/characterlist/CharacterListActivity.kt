@@ -11,9 +11,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.sample.wireviewer.R
-import com.sample.wireviewer.characterdetail.ARG_CHARACTER
-import com.sample.wireviewer.characterdetail.CharacterDetailActivity
-import com.sample.wireviewer.characterdetail.CharacterDetailFragment
+import com.sample.wireviewer.characterdetail.*
 import com.sample.wireviewer.databinding.ActivityItemDetailBinding
 import com.sample.wireviewer.databinding.ActivityItemListBinding
 import com.sample.wireviewer.model.Character
@@ -95,18 +93,22 @@ class CharacterListActivity : AppCompatActivity(){
 
             binding.toolbar.title = wireCharacter.getCharacterName()
             if (isTablet()) {
-                val fragment = CharacterDetailFragment().apply {
-                    arguments = Bundle().apply {
-                        putParcelable(ARG_CHARACTER, wireCharacter)
-                    }
-                }
+                val fragment = CharacterDetailFragment.newInstance(
+                    wireCharacter.getCharacterName(),
+                    wireCharacter.icon?.url ?: "",
+                    wireCharacter.getCharacterDescription()
+
+                )
+
                 supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.item_detail_container, fragment)
                     .commit()
             } else {
                 val intent = Intent(this, CharacterDetailActivity::class.java).apply {
-                    putExtra(ARG_CHARACTER, wireCharacter)
+                    putExtra(ARG_CHARACTER_NAME, wireCharacter.getCharacterName())
+                    putExtra(ARG_CHARACTER_URL, wireCharacter.icon?.url)
+                    putExtra(ARG_CHARACTER_DESCRIPTION, wireCharacter.getCharacterDescription())
                 }
                 this.startActivity(intent)
             }

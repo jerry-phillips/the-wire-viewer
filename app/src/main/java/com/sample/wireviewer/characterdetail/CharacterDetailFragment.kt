@@ -4,30 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.sample.wireviewer.R
-import com.sample.wireviewer.characterlist.failureMessage
 import com.sample.wireviewer.databinding.ViewItemDetailBinding
-import com.sample.wireviewer.model.Character
-
-const val ARG_CHARACTER = "character"
 
 class CharacterDetailFragment : Fragment() {
 
     private lateinit var binding: ViewItemDetailBinding
-    private var selectedCharacter: Character? = null
+    private var characterDesctiption: String? = null
+    private var url: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            if (it.containsKey(ARG_CHARACTER)) {
-                selectedCharacter = it.getParcelable(ARG_CHARACTER)
-                activity?.title = selectedCharacter?.getCharacterName()
-            } else {
-                AlertDialog.Builder(requireContext()).failureMessage()
-            }
+        arguments?.let { bundle ->
+            activity?.title = bundle.getString(ARG_CHARACTER_NAME)
+            characterDesctiption = bundle.getString(ARG_CHARACTER_DESCRIPTION)
+            url = bundle.getString(ARG_CHARACTER_URL)
         }
     }
 
@@ -36,11 +29,23 @@ class CharacterDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = ViewItemDetailBinding.inflate(layoutInflater)
-        val imageURL = "https://www.duckduckgo.com" + selectedCharacter?.icon?.uRL
+        val imageURL = "https://www.duckduckgo.com${url}"
         Glide.with(this).load(imageURL)
             .placeholder(R.drawable.ic_sphere_wireframe_10deg_6r).into(binding.characterImage)
-        binding.characterDescription.text = selectedCharacter?.getCharacterDescription()
+        binding.characterDescription.text = characterDesctiption
         return binding.root
+    }
+
+    companion object {
+
+        fun newInstance(characterName: String, url: String, characterDescription: String) =
+            CharacterDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_CHARACTER_NAME, characterName)
+                    putString(ARG_CHARACTER_DESCRIPTION, characterDescription)
+                    putString(ARG_CHARACTER_URL, url)
+                }
+            }
     }
 
 }

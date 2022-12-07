@@ -7,8 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.sample.wireviewer.R
 import com.sample.wireviewer.characterlist.CharacterListActivity
 import com.sample.wireviewer.databinding.ActivityItemDetailBinding
-import com.sample.wireviewer.model.Character
 
+const val ARG_CHARACTER_NAME = "character_name"
+const val ARG_CHARACTER_DESCRIPTION = "character_description"
+const val ARG_CHARACTER_URL = "character_url"
 class CharacterDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityItemDetailBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,14 +22,12 @@ class CharacterDetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (savedInstanceState == null) {
-            val fragment = CharacterDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(
-                        ARG_CHARACTER,
-                        intent.extras?.getParcelable(ARG_CHARACTER)
-                    )
-                }
-            }
+            val fragment = CharacterDetailFragment.newInstance(
+                intent.extras?.getString(ARG_CHARACTER_NAME) ?: "",
+                intent.extras?.getString(ARG_CHARACTER_URL) ?: "",
+                intent.extras?.getString(ARG_CHARACTER_DESCRIPTION) ?: ""
+
+            )
 
             supportFragmentManager.beginTransaction()
                 .add(R.id.item_detail_container, fragment)
