@@ -16,7 +16,7 @@ class CharacterListRepository @Inject constructor(private val duckGoService: Duc
         return if (data.isSuccessful) {
             DuckDuckGoResponse.Success(data.body()?.characters as List<Character>)
         } else {
-            DuckDuckGoResponse.Error()
+            DuckDuckGoResponse.Error
         }
     }
 }

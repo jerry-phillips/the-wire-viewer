@@ -136,11 +136,14 @@ class CharacterListActivity : AppCompatActivity(){
             }
         }
         viewModel.queriedCharacters.observe(this) { characters ->
-            if (characters!!.isEmpty()) {
+            if (characters.isNullOrEmpty()) {
                 noResults()
             } else {
                 setupRecyclerView(characters)
             }
+        }
+        viewModel.error.observe(this) {
+            AlertDialog.Builder(this).failureMessage()
         }
     }
 

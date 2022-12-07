@@ -15,6 +15,8 @@ internal class CharacterListViewModelTest: BaseTest() {
     private lateinit var subject: CharacterListViewModel
     private val repository: CharacterListRepository = mock()
 
+    @Override
+
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
@@ -32,7 +34,7 @@ internal class CharacterListViewModelTest: BaseTest() {
     @Test
     fun `verify error is set on error`() {
         runTest {
-            val error = DuckDuckGoResponse.Error()
+            val error = DuckDuckGoResponse.Error
             whenever(repository.getCharacters()).thenReturn(error)
             subject = CharacterListViewModel(repository)
 

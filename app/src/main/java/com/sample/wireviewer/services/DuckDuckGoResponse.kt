@@ -4,5 +4,5 @@ import com.sample.wireviewer.model.Character
 
 sealed class DuckDuckGoResponse {
     class Success(val data: List<Character>) : DuckDuckGoResponse()
-    class Error: DuckDuckGoResponse()
+    object Error : DuckDuckGoResponse()
 }

@@ -17,6 +17,7 @@ class CharacterListViewModel @Inject constructor(
     val characters = MutableLiveData<List<Character>?>()
     val queriedCharacters = MutableLiveData<List<Character>>()
     val error = MutableLiveData<DuckDuckGoResponse.Error>()
+
     init {
         viewModelScope.launch {
             val resource = characterListRepository.getCharacters()
@@ -28,18 +29,15 @@ class CharacterListViewModel @Inject constructor(
         }
     }
 
-
-
     fun queryCharacters(query: String) {
         val tempResults = mutableListOf<Character>()
-            if (characters.value != null) {
-                for (character in characters.value!!) {
-                    if (character.text?.contains(query, true) as Boolean) {
-                        tempResults.add(character)
-                    }
+        if (characters.value != null) {
+            for (character in characters.value!!) {
+                if (character.text?.contains(query, true) as Boolean) {
+                    tempResults.add(character)
                 }
-                queriedCharacters.value = tempResults
             }
-
+            queriedCharacters.value = tempResults
+        }
     }
 }

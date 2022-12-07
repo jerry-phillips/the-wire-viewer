@@ -21,11 +21,11 @@ internal class CharacterListRepositoryTest : BaseTest() {
         val response: Response<RequestData> = mock()
         val characterList = listOf(Character())
         val requestData = RequestData(characterList)
+        val subject = CharacterListRepository(duckGoService)
         runTest {
             whenever(duckGoService.getWireCharacters(WIREQUERY, DATAFORMAT)).thenReturn(response)
             whenever(response.body()).thenReturn(requestData)
             whenever(response.isSuccessful).thenReturn(true)
-            val subject = CharacterListRepository(duckGoService)
             val result = subject.getCharacters() as DuckDuckGoResponse.Success
 
             verify(duckGoService).getWireCharacters(WIREQUERY, DATAFORMAT)
