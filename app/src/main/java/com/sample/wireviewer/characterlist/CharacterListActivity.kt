@@ -16,7 +16,7 @@ import com.sample.wireviewer.characterdetail.*
 import com.sample.wireviewer.databinding.ActivityItemDetailBinding
 import com.sample.wireviewer.databinding.ActivityItemListBinding
 import com.sample.wireviewer.model.Character
-import com.sample.wireviewer.services.DuckDuckGoResponse
+import com.sample.wireviewer.services.CharacterData
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -136,11 +136,11 @@ class CharacterListActivity : AppCompatActivity(){
             viewModel.characters.collectLatest { characterData ->
                 showProgress(false)
                 when (characterData) {
-                    is DuckDuckGoResponse.Empty -> {}
-                    is DuckDuckGoResponse.Error -> {
+                    is CharacterData.Empty -> {}
+                    is CharacterData.Error -> {
                         AlertDialog.Builder(this@CharacterListActivity).failureMessage()
                     }
-                    is DuckDuckGoResponse.Success -> {
+                    is CharacterData.Success -> {
                         if (characterData.data.isEmpty()) {
                             noResults()
                         } else {

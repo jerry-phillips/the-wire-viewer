@@ -2,7 +2,7 @@ package com.sample.wireviewer.characterlist
 
 import com.sample.wireviewer.model.Character
 import com.sample.wireviewer.model.RequestData
-import com.sample.wireviewer.services.DuckDuckGoResponse
+import com.sample.wireviewer.services.CharacterData
 import com.sample.wireviewer.services.DuckDuckGoService
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -26,7 +26,7 @@ internal class CharacterListRepositoryTest : BaseTest() {
             whenever(duckGoService.getWireCharacters(WIREQUERY, DATAFORMAT)).thenReturn(response)
             whenever(response.body()).thenReturn(requestData)
             whenever(response.isSuccessful).thenReturn(true)
-            val result = subject.getCharacters() as DuckDuckGoResponse.Success
+            val result = subject.getCharacters() as CharacterData.Success
 
             verify(duckGoService).getWireCharacters(WIREQUERY, DATAFORMAT)
             assertEquals(characterList, result.data)

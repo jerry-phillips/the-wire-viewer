@@ -3,7 +3,7 @@ package com.sample.wireviewer.characterlist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sample.wireviewer.model.Character
-import com.sample.wireviewer.services.DuckDuckGoResponse
+import com.sample.wireviewer.services.CharacterData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -15,22 +15,22 @@ class CharacterListViewModel @Inject constructor(
     private val characterStorage: MutableList<Character>
 ) : ViewModel() {
 
-    val characters = MutableStateFlow<DuckDuckGoResponse>(DuckDuckGoResponse.Empty)
+    val characters = MutableStateFlow<CharacterData>(CharacterData.Empty)
 
     init {
         viewModelScope.launch {
-            val resource = characterListRepository.getCharacters()
-            if (resource is DuckDuckGoResponse.Success) {
-                characters.value = resource
-                characterStorage.addAll(resource.data)
+            val characterData = characterListRepository.getCharacters()
+            if (characterData is CharacterData.Success) {
+                characters.value = characterData
+                characterStorage.addAll(characterData.data)
             } else {
-                characters.value = resource as DuckDuckGoResponse.Error
+                characters.value = characterData as CharacterData.Error
             }
         }
     }
 
     fun resetData(){
-        characters.value = DuckDuckGoResponse.Success(characterStorage)
+        characters.value = CharacterData.Success(characterStorage)
     }
 
     fun queryCharacters(query: String) {
@@ -40,6 +40,6 @@ class CharacterListViewModel @Inject constructor(
                 tempResults.add(character)
             }
         }
-        characters.value = DuckDuckGoResponse.Success(tempResults)
+        characters.value = CharacterData.Success(tempResults)
     }
 }
