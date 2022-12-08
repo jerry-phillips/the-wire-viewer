@@ -10,12 +10,15 @@ import android.widget.SearchView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.sample.wireviewer.R
 import com.sample.wireviewer.characterdetail.*
 import com.sample.wireviewer.databinding.ActivityItemDetailBinding
 import com.sample.wireviewer.databinding.ActivityItemListBinding
 import com.sample.wireviewer.model.Character
+import com.sample.wireviewer.services.DuckDuckGoResponse
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 
 const val QUERYVALUE ="queryValue"
 
@@ -71,7 +74,7 @@ class CharacterListActivity : AppCompatActivity(){
 
             override fun onQueryTextChange(newText: String): Boolean {
                 if (newText.isEmpty()) {
-                    viewModel.characters.value?.let { setupRecyclerView(it) }
+                    viewModel.resetData()
                     searchView?.isIconified = true
                 }
                 return false
@@ -128,24 +131,24 @@ class CharacterListActivity : AppCompatActivity(){
         search.startAnimation(wiggle)
     }
 
-    private fun observeCharactersFromViewModel(){
-        viewModel.characters.observe(this) { characters ->
-            showProgress(false)
-            if (!characters.isNullOrEmpty()) {
-                setupRecyclerView(characters)
-            } else {
-                AlertDialog.Builder(this).failureMessage()
+    private fun observeCharactersFromViewModel() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.characters.collectLatest { characterData ->
+                showProgress(false)
+                when (characterData) {
+                    is DuckDuckGoResponse.Empty -> {}
+                    is DuckDuckGoResponse.Error -> {
+                        AlertDialog.Builder(this@CharacterListActivity).failureMessage()
+                    }
+                    is DuckDuckGoResponse.Success -> {
+                        if (characterData.data.isEmpty()) {
+                            noResults()
+                        } else {
+                            setupRecyclerView(characterData.data)
+                        }
+                    }
+                }
             }
-        }
-        viewModel.queriedCharacters.observe(this) { characters ->
-            if (characters.isNullOrEmpty()) {
-                noResults()
-            } else {
-                setupRecyclerView(characters)
-            }
-        }
-        viewModel.error.observe(this) {
-            AlertDialog.Builder(this).failureMessage()
         }
     }
 
