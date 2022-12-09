@@ -55,6 +55,7 @@ class CharacterListActivity : AppCompatActivity(){
             searchQuery = savedInstanceState.getCharSequence(QUERYVALUE) as CharSequence
         } else {
             showProgress(true)
+            viewModel.fetchCharacters()
             observeCharactersFromViewModel()
         }
 
@@ -74,7 +75,7 @@ class CharacterListActivity : AppCompatActivity(){
 
             override fun onQueryTextChange(newText: String): Boolean {
                 if (newText.isEmpty()) {
-                    viewModel.resetData()
+                    viewModel.fetchCharacters()
                     searchView?.isIconified = true
                 }
                 return false

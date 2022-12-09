@@ -6,40 +6,42 @@ import com.sample.wireviewer.model.Character
 import com.sample.wireviewer.services.CharacterData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CharacterListViewModel @Inject constructor(
-    characterListRepository: CharacterListRepository,
-    private val characterStorage: MutableList<Character>
+    private val characterListRepository: CharacterListRepository
 ) : ViewModel() {
 
-    val characters = MutableStateFlow<CharacterData>(CharacterData.Empty)
+    private val _characters = MutableStateFlow<CharacterData>(CharacterData.Empty)
+    val characters: StateFlow<CharacterData> = _characters
 
     init {
-        viewModelScope.launch {
-            val characterData = characterListRepository.getCharacters()
-            if (characterData is CharacterData.Success) {
-                characters.value = characterData
-                characterStorage.addAll(characterData.data)
-            } else {
-                characters.value = characterData as CharacterData.Error
-            }
-        }
+        fetchCharacters()
     }
 
-    fun resetData(){
-        characters.value = CharacterData.Success(characterStorage)
+    fun fetchCharacters() {
+        viewModelScope.launch {
+                val characters = characterListRepository.getCharacters()
+
+                if (characters.isNullOrEmpty()) {
+                    _characters.value = CharacterData.Error
+                } else {
+                    _characters.value = CharacterData.Success(characters)
+                }
+        }
     }
 
     fun queryCharacters(query: String) {
         val tempResults = mutableListOf<Character>()
-        for (character in characterStorage) {
+        val characterList = (characters.value as CharacterData.Success).data
+        for (character in characterList) {
             if (character.text?.contains(query, true) as Boolean) {
                 tempResults.add(character)
             }
         }
-        characters.value = CharacterData.Success(tempResults)
+        _characters.value = CharacterData.Success(tempResults)
     }
 }
