@@ -96,6 +96,7 @@ class CharacterListActivity : AppCompatActivity(){
         ) { wireCharacter ->
 
             binding.toolbar.title = wireCharacter.getCharacterName()
+
             if (isTablet()) {
                 val fragment = CharacterDetailFragment.newInstance(
                     wireCharacter.getCharacterName(),
@@ -111,7 +112,7 @@ class CharacterListActivity : AppCompatActivity(){
             } else {
                 val intent = Intent(this, CharacterDetailActivity::class.java).apply {
                     putExtra(ARG_CHARACTER_NAME, wireCharacter.getCharacterName())
-                    putExtra(ARG_CHARACTER_URL, wireCharacter.icon?.url)
+                    putExtra(ARG_CHARACTER_URL, wireCharacter.icon?.url ?: "")
                     putExtra(ARG_CHARACTER_DESCRIPTION, wireCharacter.getCharacterDescription())
                 }
                 this.startActivity(intent)

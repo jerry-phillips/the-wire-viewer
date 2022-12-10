@@ -1,11 +1,16 @@
 package com.sample.wireviewer.characterdetail
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.sample.wireviewer.R
 import com.sample.wireviewer.databinding.ViewItemDetailBinding
 
@@ -30,10 +35,33 @@ class CharacterDetailFragment : Fragment() {
     ): View {
         binding = ViewItemDetailBinding.inflate(layoutInflater)
         val imageURL = "https://www.duckduckgo.com${url}"
-        Glide.with(this).load(imageURL)
-            .placeholder(R.drawable.ic_sphere_wireframe_10deg_6r).into(binding.characterImage)
+        setCharacterImage(imageURL)
         binding.characterDescription.text = characterDesctiption
         return binding.root
+    }
+
+    private fun setCharacterImage(url: String) {
+        Glide.with(this)
+            .load(url)
+            .addListener((object: RequestListener<Drawable> {
+                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean) =
+                    false
+
+                override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                    resource?.let {
+                        val width = resource.intrinsicWidth
+                        val height = resource.intrinsicHeight
+                        if (height > 1 && width > 1) {
+                            binding.characterImage.setImageDrawable(resource)
+                        } else {
+                            binding.characterImage.setImageResource(R.drawable.ic_sphere_wireframe_10deg_6r)
+                        }
+                    }
+                    return false
+                }
+            })
+            ).preload()
+
     }
 
     companion object {
