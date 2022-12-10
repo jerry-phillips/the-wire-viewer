@@ -26,10 +26,10 @@ class CharacterListViewModel @Inject constructor(
         viewModelScope.launch {
                 val characters = characterListRepository.getCharacters()
 
-                if (characters.isNullOrEmpty()) {
-                    _characters.value = CharacterData.Error
-                } else {
+                if (!characters.isNullOrEmpty()) {
                     _characters.value = CharacterData.Success(characters)
+                } else {
+                    _characters.value = CharacterData.Error
                 }
         }
     }
