@@ -2,7 +2,6 @@ package com.sample.wireviewer.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.sample.wireviewer.services.AppDispatchers
 import com.sample.wireviewer.services.DuckDuckGoService
 import com.sample.wireviewer.services.ENDPOINT
 import dagger.Module
@@ -21,9 +20,6 @@ class AppModule {
 
     @Provides
     fun providesGson(): Gson = GsonBuilder().setLenient().create()
-
-    @Provides
-    fun provideDispatchers(): AppDispatchers = AppDispatchers()
 
     @Provides
     @Singleton
