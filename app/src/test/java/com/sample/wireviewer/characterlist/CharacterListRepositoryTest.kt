@@ -2,9 +2,8 @@ package com.sample.wireviewer.characterlist
 
 import com.sample.wireviewer.model.Character
 import com.sample.wireviewer.model.RequestData
-import com.sample.wireviewer.services.CharacterData
 import com.sample.wireviewer.services.DuckDuckGoService
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.mockito.kotlin.mock
@@ -22,14 +21,14 @@ internal class CharacterListRepositoryTest : BaseTest() {
         val characterList = listOf(Character())
         val requestData = RequestData(characterList)
         val subject = CharacterListRepository(duckGoService)
-        runTest {
+        runBlocking {
             whenever(duckGoService.getWireCharacters(WIREQUERY, DATAFORMAT)).thenReturn(response)
             whenever(response.body()).thenReturn(requestData)
             whenever(response.isSuccessful).thenReturn(true)
-            val result = subject.getCharacters() as CharacterData.Success
+            val result = subject.getCharacters()
 
             verify(duckGoService).getWireCharacters(WIREQUERY, DATAFORMAT)
-            assertEquals(characterList, result.data)
+            assertEquals(characterList, result)
         }
     }
 }
