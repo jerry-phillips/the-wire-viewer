@@ -2,13 +2,10 @@ package com.sample.wireviewer.characterlist
 
 import com.sample.wireviewer.model.Character
 import com.sample.wireviewer.services.CharacterData
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.mockito.kotlin.doSuspendableAnswer
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -26,8 +23,17 @@ internal class CharacterListViewModelTest : BaseTest() {
         runBlocking {
             setUpTestSubject()
             whenever(repository.getCharacters()).thenReturn(characterList)
-            verify(repository).getCharacters()
+            subject.fetchCharacters()
+            delay(50)
             assert(subject.characters.value is CharacterData.Success)
+        }
+    }
+
+    @Test
+    fun `verify fetch`() {
+        runBlocking {
+            setUpTestSubject()
+            verify(repository).getCharacters()
         }
     }
 
@@ -35,10 +41,8 @@ internal class CharacterListViewModelTest : BaseTest() {
     fun `verify error is set on error`() {
         runBlocking {
             setUpTestSubject()
-            whenever(repository.getCharacters()).doSuspendableAnswer {
-                withContext(Dispatchers.IO) { delay(5000) }
-                null
-            }
+            whenever(repository.getCharacters()).thenReturn(null)
+            subject.fetchCharacters()
             assert(subject.characters.value is CharacterData.Error)
         }
     }
@@ -49,7 +53,7 @@ internal class CharacterListViewModelTest : BaseTest() {
             setUpTestSubject()
             whenever(repository.getCharacters()).thenReturn(characterList)
             subject.fetchCharacters()
-            delay(5)
+            delay(50)
             subject.queryCharacters("Idris")
 
             assertEquals(
