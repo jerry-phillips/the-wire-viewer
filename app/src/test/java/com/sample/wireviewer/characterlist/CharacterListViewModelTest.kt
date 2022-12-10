@@ -2,10 +2,13 @@ package com.sample.wireviewer.characterlist
 
 import com.sample.wireviewer.model.Character
 import com.sample.wireviewer.services.CharacterData
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import org.mockito.kotlin.doSuspendableAnswer
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -13,7 +16,7 @@ import org.mockito.kotlin.whenever
 internal class CharacterListViewModelTest : BaseTest() {
 
 
-    private val repository: CharacterListRepository = mock()
+    private lateinit var repository: CharacterListRepository
     private lateinit var subject: CharacterListViewModel
     private val characterList = mutableListOf(Character(text = "Idris Elba "),
     Character(text = "Lucy"))
@@ -21,28 +24,31 @@ internal class CharacterListViewModelTest : BaseTest() {
     @Test
     fun `verify character data is set`() {
         runBlocking {
-            whenever(repository.getCharacters()).thenReturn(characterList)
             setUpTestSubject()
+            whenever(repository.getCharacters()).thenReturn(characterList)
             verify(repository).getCharacters()
-            assertEquals(characterList, (subject.characters.value as CharacterData.Success).data)
+            assert(subject.characters.value is CharacterData.Success)
         }
     }
 
     @Test
     fun `verify error is set on error`() {
         runBlocking {
-            whenever(repository.getCharacters()).thenReturn(null)
             setUpTestSubject()
-            verify(repository).getCharacters()
-            assertEquals( CharacterData.Error, subject.characters.value)
+            whenever(repository.getCharacters()).doSuspendableAnswer {
+                withContext(Dispatchers.IO) { delay(5000) }
+                null
+            }
+            assert(subject.characters.value is CharacterData.Error)
         }
     }
 
     @Test
     fun `verify querying of data`() {
         runBlocking {
-            whenever(repository.getCharacters()).thenReturn(characterList)
             setUpTestSubject()
+            whenever(repository.getCharacters()).thenReturn(characterList)
+            subject.fetchCharacters()
             delay(5)
             subject.queryCharacters("Idris")
 
@@ -54,6 +60,7 @@ internal class CharacterListViewModelTest : BaseTest() {
     }
 
     private fun setUpTestSubject() {
+        repository = mock()
         subject = CharacterListViewModel(repository)
     }
 }

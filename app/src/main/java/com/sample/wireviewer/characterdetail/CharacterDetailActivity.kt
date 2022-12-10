@@ -11,6 +11,7 @@ import com.sample.wireviewer.databinding.ActivityItemDetailBinding
 const val ARG_CHARACTER_NAME = "character_name"
 const val ARG_CHARACTER_DESCRIPTION = "character_description"
 const val ARG_CHARACTER_URL = "character_url"
+
 class CharacterDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityItemDetailBinding
     override fun onCreate(savedInstanceState: Bundle?) {
