@@ -28,7 +28,6 @@ internal class CharacterListViewModelTest : BaseTest() {
             assert(subject.characters.value is CharacterData.Success)
         }
     }
-
     @Test
     fun `verify fetch`() {
         runBlocking {
