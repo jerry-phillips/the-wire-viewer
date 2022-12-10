@@ -2,7 +2,6 @@ package com.sample.wireviewer.characterlist
 
 import com.sample.wireviewer.model.Character
 import com.sample.wireviewer.services.CharacterData
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -24,7 +23,6 @@ internal class CharacterListViewModelTest : BaseTest() {
             setUpTestSubject()
             whenever(repository.getCharacters()).thenReturn(characterList)
             subject.fetchCharacters()
-            delay(50)
             assert(subject.characters.value is CharacterData.Success)
         }
     }
@@ -52,7 +50,6 @@ internal class CharacterListViewModelTest : BaseTest() {
             setUpTestSubject()
             whenever(repository.getCharacters()).thenReturn(characterList)
             subject.fetchCharacters()
-            delay(50)
             subject.queryCharacters("Idris")
 
             assertEquals(
