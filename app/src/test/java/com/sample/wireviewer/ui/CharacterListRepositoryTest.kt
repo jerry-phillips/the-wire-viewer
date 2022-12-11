@@ -11,7 +11,6 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import retrofit2.Response
 
-
 internal class CharacterListRepositoryTest : BaseTest() {
 
     @Test

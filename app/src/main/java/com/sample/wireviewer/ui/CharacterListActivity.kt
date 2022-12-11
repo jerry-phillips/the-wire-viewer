@@ -120,11 +120,10 @@ class CharacterListActivity : AppCompatActivity() {
 
     private fun showProgress(showProgress: Boolean) {
         if (showProgress) {
-            binding.progressBar.visibility = View.VISIBLE
+            binding.include.progressBar.visibility = View.VISIBLE
         } else {
-            binding.progressBar.visibility = View.GONE
+            binding.include.progressBar.visibility = View.GONE
         }
-
     }
 
     private fun noResults() {

@@ -11,11 +11,13 @@
     tools:context=".ui.CharacterListActivity"
     >
 
-    <!--
-    This layout is a two-pane layout for the Items
-    master/detail flow.
-
-    -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/item_list"

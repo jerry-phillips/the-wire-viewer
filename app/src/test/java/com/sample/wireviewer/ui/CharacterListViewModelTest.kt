@@ -13,11 +13,12 @@ import org.mockito.kotlin.whenever
 
 internal class CharacterListViewModelTest : BaseTest() {
 
-
     private lateinit var repository: CharacterListRepository
     private lateinit var subject: CharacterListViewModel
-    private val characterList = mutableListOf(Character(text = "Idris Elba "),
-    Character(text = "Lucy"))
+    private val characterList = mutableListOf(
+        Character(text = "Idris Elba "),
+        Character(text = "Lucy")
+    )
 
     @Test
     fun `verify character data is set`() {
@@ -28,6 +29,7 @@ internal class CharacterListViewModelTest : BaseTest() {
             assert(subject.characters.value is CharacterData.Success)
         }
     }
+
     @Test
     fun `verify fetch`() {
         runBlocking {
