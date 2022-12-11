@@ -1,8 +1,10 @@
-package com.sample.wireviewer.characterlist
+package com.sample.wireviewer.ui
 
 import com.sample.wireviewer.model.Character
+import com.sample.wireviewer.services.AppDispatchers
 import com.sample.wireviewer.services.CharacterData
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.mockito.kotlin.mock
@@ -59,8 +61,12 @@ internal class CharacterListViewModelTest : BaseTest() {
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun setUpTestSubject() {
         repository = mock()
-        subject = CharacterListViewModel(repository)
+        val testDispatcher = AppDispatchers(
+            IO = UnconfinedTestDispatcher()
+        )
+        subject = CharacterListViewModel(repository, testDispatcher)
     }
 }

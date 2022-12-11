@@ -1,4 +1,4 @@
-package com.sample.wireviewer.characterlist
+package com.sample.wireviewer.ui
 
 import com.sample.wireviewer.model.Character
 import com.sample.wireviewer.model.RequestData

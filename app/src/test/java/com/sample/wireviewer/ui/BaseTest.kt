@@ -1,4 +1,4 @@
-package com.sample.wireviewer.characterlist
+package com.sample.wireviewer.ui
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.UnconfinedTestDispatcher

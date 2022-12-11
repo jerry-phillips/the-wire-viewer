@@ -1,4 +1,4 @@
-package com.sample.wireviewer.characterlist
+package com.sample.wireviewer.ui
 
 
 import android.view.LayoutInflater

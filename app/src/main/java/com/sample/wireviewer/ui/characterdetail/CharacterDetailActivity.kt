@@ -1,12 +1,12 @@
-package com.sample.wireviewer.characterdetail
+package com.sample.wireviewer.ui.characterdetail
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.sample.wireviewer.R
-import com.sample.wireviewer.characterlist.CharacterListActivity
 import com.sample.wireviewer.databinding.ActivityItemDetailBinding
+import com.sample.wireviewer.ui.CharacterListActivity
 
 const val ARG_CHARACTER_NAME = "character_name"
 const val ARG_CHARACTER_DESCRIPTION = "character_description"

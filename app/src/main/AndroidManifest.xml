@@ -12,7 +12,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
-                android:name=".characterlist.CharacterListActivity"
+                android:name=".ui.CharacterListActivity"
                 android:theme="@style/AppTheme.NoActionBar"
                 android:exported="true">
             <intent-filter>
@@ -22,13 +22,13 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".characterdetail.CharacterDetailActivity"
+                android:name=".ui.characterdetail.CharacterDetailActivity"
                 android:label="@string/title_item_detail"
-                android:parentActivityName=".characterlist.CharacterListActivity"
+                android:parentActivityName=".ui.CharacterListActivity"
                 android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value="com.sample.wireviewer.characterlist.CharacterListActivity"/>
+                    android:value="com.sample.wireviewer.ui.CharacterListActivity"/>
         </activity>
     </application>
 

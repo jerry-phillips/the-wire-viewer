@@ -1,4 +1,4 @@
-package com.sample.wireviewer.characterdetail
+package com.sample.wireviewer.ui.characterdetail
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle

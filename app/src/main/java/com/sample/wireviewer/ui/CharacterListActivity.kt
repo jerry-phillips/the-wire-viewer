@@ -1,4 +1,4 @@
-package com.sample.wireviewer.characterlist
+package com.sample.wireviewer.ui
 
 import android.content.Intent
 import android.content.res.Configuration
@@ -12,21 +12,20 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.sample.wireviewer.R
-import com.sample.wireviewer.characterdetail.*
-import com.sample.wireviewer.databinding.ActivityItemDetailBinding
 import com.sample.wireviewer.databinding.ActivityItemListBinding
 import com.sample.wireviewer.model.Character
 import com.sample.wireviewer.services.CharacterData
+import com.sample.wireviewer.ui.characterdetail.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
-const val QUERYVALUE ="queryValue"
+const val QUERYVALUE = "queryValue"
 
-fun AlertDialog.Builder.failureMessage(){
+fun AlertDialog.Builder.failureMessage() {
     val builder = AlertDialog.Builder(context)
     builder.setTitle(context.getString(R.string.failure))
     builder.setMessage(context.getString(R.string.something_went_wrong))
-    builder.setNeutralButton(context.getString(android.R.string.ok)){dialog,_ ->
+    builder.setNeutralButton(context.getString(android.R.string.ok)) { dialog, _ ->
         dialog.dismiss()
     }
     val dialog: AlertDialog = builder.create()
@@ -34,24 +33,22 @@ fun AlertDialog.Builder.failureMessage(){
 }
 
 @AndroidEntryPoint
-class CharacterListActivity : AppCompatActivity(){
+class CharacterListActivity : AppCompatActivity() {
 
-    private val viewModel:CharacterListViewModel by viewModels()
-    private var searchView:SearchView? = null
-    private var searchQuery:CharSequence? = null
+    private val viewModel: CharacterListViewModel by viewModels()
+    private var searchView: SearchView? = null
+    private var searchQuery: CharSequence? = null
     private lateinit var binding: ActivityItemListBinding
-    private lateinit var detailBinding: ActivityItemDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityItemListBinding.inflate(layoutInflater)
-        detailBinding = ActivityItemDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
         binding.toolbar.title = title
 
-        if (savedInstanceState?.getCharSequence(QUERYVALUE) != null){
+        if (savedInstanceState?.getCharSequence(QUERYVALUE) != null) {
             searchQuery = savedInstanceState.getCharSequence(QUERYVALUE) as CharSequence
         } else {
             showProgress(true)
@@ -68,7 +65,7 @@ class CharacterListActivity : AppCompatActivity(){
             override fun onQueryTextSubmit(query: String): Boolean {
                 searchQuery = searchView?.query
                 if (query.length > 2) {
-                   viewModel.queryCharacters(query)
+                    viewModel.queryCharacters(query)
                 }
                 return false
             }
@@ -90,7 +87,8 @@ class CharacterListActivity : AppCompatActivity(){
         }
         return true
     }
-    private fun setupRecyclerView( characters:List<Character>) {
+
+    private fun setupRecyclerView(characters: List<Character>) {
         binding.include.itemList.adapter = CharacterListAdapter(
             characters
         ) { wireCharacter ->
@@ -119,17 +117,20 @@ class CharacterListActivity : AppCompatActivity(){
             }
         }
     }
-    private fun showProgress(isShowingProgress: Boolean) {
-        if(isShowingProgress) {
+
+    private fun showProgress(showProgress: Boolean) {
+        if (showProgress) {
             binding.progressBar.visibility = View.VISIBLE
-        } else{
-            binding.progressBar.visibility = View.GONE}
+        } else {
+            binding.progressBar.visibility = View.GONE
+        }
 
     }
 
-   private fun noResults() {
+    private fun noResults() {
         val wiggle = AnimationUtils.loadAnimation(this, R.anim.wiggle)
-        val search = window.decorView.findViewById<View>(android.R.id.content).findViewById<View>(R.id.action_search)
+        val search = window.decorView.findViewById<View>(android.R.id.content)
+            .findViewById<View>(R.id.action_search)
         search.startAnimation(wiggle)
     }
 
@@ -156,7 +157,7 @@ class CharacterListActivity : AppCompatActivity(){
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        if(searchView?.query?.isNotEmpty() == true) {
+        if (searchView?.query?.isNotEmpty() == true) {
             outState.putCharSequence(QUERYVALUE, searchView?.query)
         }
     }

@@ -8,7 +8,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context=".characterlist.CharacterListActivity"
+    tools:context=".ui.CharacterListActivity"
     >
 
     <!--
@@ -25,7 +25,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context="com.sample.wireviewer.characterlist.CharacterListActivity"
+        tools:context="com.sample.wireviewer.ui.CharacterListActivity"
         tools:listitem="@layout/view_list_item" />
 
     <FrameLayout

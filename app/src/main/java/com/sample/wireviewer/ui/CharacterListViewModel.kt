@@ -1,18 +1,21 @@
-package com.sample.wireviewer.characterlist
+package com.sample.wireviewer.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sample.wireviewer.model.Character
+import com.sample.wireviewer.services.AppDispatchers
 import com.sample.wireviewer.services.CharacterData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class CharacterListViewModel @Inject constructor(
-    private val characterListRepository: CharacterListRepository
+    private val characterListRepository: CharacterListRepository,
+    private val appDispatchers: AppDispatchers
 ) : ViewModel() {
 
     private val _characters = MutableStateFlow<CharacterData>(CharacterData.Empty)
@@ -24,13 +27,18 @@ class CharacterListViewModel @Inject constructor(
 
     fun fetchCharacters() {
         viewModelScope.launch {
-                val characters = characterListRepository.getCharacters()
-
-                if (!characters.isNullOrEmpty()) {
-                    _characters.value = CharacterData.Success(characters)
-                } else {
-                    _characters.value = CharacterData.Error
+                _characters.value = withContext(appDispatchers.IO) {
+                    try {
+                        val characters = characterListRepository.getCharacters()
+                        if (!characters.isNullOrEmpty()) {
+                             CharacterData.Success(characters)
+                        } else {
+                             CharacterData.Error
+                        }
+                    } catch (e: Exception) {
+                        CharacterData.Error
                 }
+        }
         }
     }
 
