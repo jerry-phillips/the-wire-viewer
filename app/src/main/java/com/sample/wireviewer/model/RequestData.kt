@@ -1,7 +1,9 @@
 package com.sample.wireviewer.model
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class RequestData(
-    @SerializedName("RelatedTopics") val characters: List<Character>? = null
+    @SerialName("RelatedTopics") val characters: List<Character>? = null
 )

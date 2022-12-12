@@ -1,10 +1,13 @@
 package com.sample.wireviewer.model
 
-import com.google.gson.annotations.SerializedName
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Character(
-    @SerializedName("Icon") val icon: Icon? = null,
-    @SerializedName("Text") val text: String? = null
+    @SerialName("Icon") val icon: Icon? = null,
+    @SerialName("Text") val text: String? = null
 ) {
 
     fun getCharacterName(): String {

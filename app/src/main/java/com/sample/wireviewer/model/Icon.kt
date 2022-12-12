@@ -1,7 +1,10 @@
 package com.sample.wireviewer.model
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+
+@Serializable
 data class Icon(
-    @SerializedName("URL") val url: String? = null
+    @SerialName("URL") val url: String? = null
 )
