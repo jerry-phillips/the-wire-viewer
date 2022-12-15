@@ -32,8 +32,7 @@ fun ExpandableSearchView(
     onSearchDisplayChanged: (String) -> Unit,
     onSearchDisplayClosed: () -> Unit,
     modifier: Modifier = Modifier,
-    expandedInitially: Boolean = false,
-    tint: Color = MaterialTheme.colorScheme.secondary
+    expandedInitially: Boolean = false
 ) {
     val (expanded, onExpandedChanged) = remember {
         mutableStateOf(expandedInitially)
@@ -47,8 +46,7 @@ fun ExpandableSearchView(
                 onSearchDisplayChanged = onSearchDisplayChanged,
                 onSearchDisplayClosed = onSearchDisplayClosed,
                 onExpandedChanged = onExpandedChanged,
-                modifier = modifier,
-                tint = tint
+                modifier = modifier
             )
 
             false -> CollapsedSearchView(
@@ -77,7 +75,7 @@ fun CollapsedSearchView(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 2.dp)
-            .background(color = MaterialTheme.colorScheme.primary),
+            .background(color = MaterialTheme.colorScheme.secondary),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -101,8 +99,7 @@ fun ExpandedSearchView(
     onSearchDisplayChanged: (String) -> Unit,
     onSearchDisplayClosed: () -> Unit,
     onExpandedChanged: (Boolean) -> Unit,
-    modifier: Modifier = Modifier,
-    tint: Color = MaterialTheme.colorScheme.onPrimary,
+    modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -128,23 +125,24 @@ fun ExpandedSearchView(
             Icon(
                 imageVector = Icons.Filled.ArrowBack,
                 contentDescription = "back icon",
-                tint = tint
+                tint = MaterialTheme.colorScheme.secondary
             )
         }
         TextField(
             value = textFieldValue,
+            colors = TextFieldDefaults.textFieldColors(containerColor = MaterialTheme.colorScheme.onPrimary),
             onValueChange = {
                 textFieldValue = it
                 onSearchDisplayChanged(it.text)
             },
             trailingIcon = {
-                SearchIcon(iconTint = tint)
+                SearchIcon(iconTint = MaterialTheme.colorScheme.secondary)
             },
             modifier = Modifier
                 .fillMaxWidth()
                 .focusRequester(textFieldFocusRequester),
             label = {
-                Text(text = "Search", color = tint)
+                Text(text = "Search", color = MaterialTheme.colorScheme.secondary)
             },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done
