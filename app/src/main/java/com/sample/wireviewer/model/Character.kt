@@ -10,15 +10,19 @@ data class Character(
     @SerialName("Text") val text: String? = null
 ) {
 
-    fun getCharacterName(): String {
-        val separated =
-            this.text!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        return separated[0].trim { it <= ' ' }
-    }
 
-    fun getCharacterDescription(): String {
-        val separated =
-            this.text!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        return separated[separated.size.minus(1)].trim { it <= ' ' }
+
+    companion object {
+        fun getCharacterName(text: String?): String? {
+            val separated =
+                text?.split("-".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()
+            return separated?.get(0)?.trim { it <= ' ' }
+        }
+
+        fun getCharacterDescription(text: String?): String? {
+            val separated =
+                text?.split("-".toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()
+            return separated?.get(separated.size.minus(1))?.trim { it <= ' ' }
+        }
     }
 }

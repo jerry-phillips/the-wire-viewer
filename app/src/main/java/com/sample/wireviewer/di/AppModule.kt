@@ -8,19 +8,24 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
+@OptIn(ExperimentalSerializationApi::class)
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
 
+    private val json = Json { ignoreUnknownKeys = true }
+
     @Provides
-    fun provideMediaType(): MediaType =MediaType.get("application/json; charset=utf-8")
+    fun provideMediaType(): MediaType = "application/json; charset=utf-8".toMediaType()
 
     @Provides
     fun provideDispatchers(): AppDispatchers = AppDispatchers()
@@ -34,7 +39,7 @@ class AppModule {
             client.readTimeout(15, TimeUnit.SECONDS)
             client.writeTimeout(15, TimeUnit.SECONDS)
         }.build())
-        .addConverterFactory(Json{ ignoreUnknownKeys = true }.asConverterFactory(contentType))
+        .addConverterFactory(json.asConverterFactory(contentType))
         .build()
 
     @Provides

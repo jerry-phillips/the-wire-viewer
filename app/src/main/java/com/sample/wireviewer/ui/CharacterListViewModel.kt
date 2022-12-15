@@ -33,7 +33,7 @@ class CharacterListViewModel @Inject constructor(
                         if (!characters.isNullOrEmpty()) {
                              CharacterData.Success(characters)
                         } else {
-                             CharacterData.Error
+                             CharacterData.NoData
                         }
                     } catch (e: Exception) {
                         CharacterData.Error
