@@ -54,21 +54,19 @@ dependencies {
     implementation "androidx.compose.foundation:foundation-layout"
     implementation "androidx.compose.ui:ui-tooling"
     implementation("io.coil-kt:coil-compose:2.2.2")
-    implementation("androidx.navigation:navigation-compose:2.5.3")
+    implementation("androidx.navigation:navigation-compose")
     implementation "androidx.lifecycle:lifecycle-runtime-compose:2.6.0-alpha03"
     implementation "com.google.accompanist:accompanist-navigation-animation:0.24.5-alpha"
     implementation "com.google.accompanist:accompanist-themeadapter-material3:0.28.0"
     implementation "androidx.compose.material3:material3:1.1.0-alpha03"
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0-alpha01")
 
     def coroutines_version = "1.6.4"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation 'com.github.bumptech.glide:glide:4.12.0'
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:runner:1.5.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'

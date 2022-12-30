@@ -1,6 +1,6 @@
 package com.sample.wireviewer.ui
 
-import android.annotation.SuppressLint
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -11,21 +11,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.sample.wireviewer.model.Character
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+
 import com.sample.wireviewer.ui.theme.TheWireTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CharacterDetailView(
-    navController: NavController = rememberNavController(),
+    hasBackStackEntry: Boolean,
+    navigateToDestination: ()-> Unit,
     url: String?,
     text: String?
 ) {
     TheWireTheme {
         Scaffold(
-            topBar = { StandardTopAppBar(navController = navController, stringResource = null) }
+            topBar = { StandardTopAppBar(
+                hasBackStackEntry = hasBackStackEntry,
+                navigateback = navigateToDestination,
+                stringResource = null) }
         ) { innerPadding ->
             Column(
                 modifier = Modifier.fillMaxSize().padding(innerPadding),

@@ -5,24 +5,33 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun Navigate(
-    navigationController: NavHostController = rememberAnimatedNavController()
-) {
+fun Navigate() {
+    val navigationController = rememberAnimatedNavController()
     AnimatedNavHost(
         navController = navigationController,
         startDestination = Screen.CharacterListScreen.route
     ) {
         composable(route = Screen.CharacterListScreen.route) {
-            CharacterListView(navController = navigationController)
+            val viewModel: CharacterListViewModel = hiltViewModel()
+            val navigateToDestination = { url: String?, text: String? ->
+                viewModel.resetCharacterData()
+                val encodedUrl = URLEncoder.encode(url, StandardCharsets.UTF_8.toString())
+                navigationController.navigate(
+                    "${Screen.CharacterDetailScreen.route}/${encodedUrl}/${text}"
+                )
+            }
+            CharacterListView(viewModel, navigateToDestination)
         }
         composable(route = "${Screen.CharacterDetailScreen.route}/{url}/{text}",
             arguments = listOf(
@@ -38,7 +47,11 @@ fun Navigate(
             enterTransition = { -> slideInHorizontally(animationSpec = tween(500)) },
             exitTransition = { -> slideOutHorizontally(animationSpec = tween(
                 500)) }){ entry ->
-            CharacterDetailView(navController = navigationController,
+            val hasBackStackEntry = navigationController.previousBackStackEntry != null
+
+            CharacterDetailView(
+                hasBackStackEntry = hasBackStackEntry,
+                navigateToDestination = { navigationController.navigateUp() },
                 url = entry.arguments?.getString("url"),
                 text = entry.arguments?.getString("text"))
         }

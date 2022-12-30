@@ -15,7 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CharacterListViewModel @Inject constructor(
     private val characterListRepository: CharacterListRepository,
-    private val appDispatchers: AppDispatchers
+    private val appDispatchers: AppDispatchers,
+    private val characterCache: MutableList<Character>
 ) : ViewModel() {
 
     private val _characters = MutableStateFlow<CharacterData>(CharacterData.Empty)
@@ -25,30 +26,31 @@ class CharacterListViewModel @Inject constructor(
         fetchCharacters()
     }
 
+    fun resetCharacterData(){
+        _characters.value = CharacterData.Success(characterCache)
+    }
+
     fun fetchCharacters() {
         viewModelScope.launch {
-                _characters.value = withContext(appDispatchers.IO) {
-                    try {
-                        val characters = characterListRepository.getCharacters()
-                        if (!characters.isNullOrEmpty()) {
-                             CharacterData.Success(characters)
-                        } else {
-                             CharacterData.NoData
-                        }
-                    } catch (e: Exception) {
-                        CharacterData.Error
+            _characters.value = withContext(appDispatchers.IO) {
+                try {
+                    val characters = characterListRepository.getCharacters()
+                    if (!characters.isNullOrEmpty()) {
+                        characterCache.addAll(characters)
+                        CharacterData.Success(characters)
+                    } else {
+                        CharacterData.NoData
+                    }
+                } catch (e: Exception) {
+                    CharacterData.Error
                 }
-        }
+            }
         }
     }
 
     fun queryCharacters(query: String) {
-        val tempResults = mutableListOf<Character>()
-        val characterList = (characters.value as CharacterData.Success).data
-        for (character in characterList) {
-            if (character.text?.contains(query, true) as Boolean) {
-                tempResults.add(character)
-            }
+        val tempResults = characterCache.filter { character ->
+            character.text?.contains(query, true) as Boolean
         }
         _characters.value = CharacterData.Success(tempResults)
     }

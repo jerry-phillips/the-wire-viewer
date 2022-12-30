@@ -38,15 +38,15 @@ fun SetImage(size: Dp, url: String?) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StandardTopAppBar(navController: NavController, @StringRes stringResource: Int?) {
+fun StandardTopAppBar(hasBackStackEntry: Boolean, navigateback: () -> Unit, @StringRes stringResource: Int?) {
     TopAppBar(title = {
         Text(
             text = stringResource(id = stringResource ?: R.string.empty),
             fontWeight = FontWeight.Bold,
         )
     }, navigationIcon = {
-        if (navController.previousBackStackEntry != null) {
-            IconButton(onClick = { navController.navigateUp() }) {
+        if (hasBackStackEntry) {
+            IconButton(onClick = { navigateback.invoke() }) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "Back",

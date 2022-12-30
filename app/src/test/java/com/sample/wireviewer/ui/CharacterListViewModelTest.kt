@@ -42,9 +42,37 @@ internal class CharacterListViewModelTest : BaseTest() {
     fun `verify error is set on error`() {
         runBlocking {
             setUpTestSubject()
-            whenever(repository.getCharacters()).thenReturn(null)
+            whenever(repository.getCharacters()).thenThrow(Exception())
             subject.fetchCharacters()
             assert(subject.characters.value is CharacterData.Error)
+        }
+    }
+
+    @Test
+    fun `verify characterData is noData is set on null`() {
+        runBlocking {
+            setUpTestSubject()
+            whenever(repository.getCharacters()).thenReturn(null)
+            subject.fetchCharacters()
+            assert(subject.characters.value is CharacterData.NoData)
+        }
+    }
+
+    @Test
+    fun `verify reset of characterData`() {
+        runBlocking {
+            setUpTestSubject()
+            subject.queryCharacters("idris")
+            assertEquals(
+                listOf(Character(text = "Idris Elba ")),
+                (subject.characters.value as CharacterData.Success).data
+            )
+            subject.resetCharacterData()
+            assertEquals(
+                characterList,
+                (subject.characters.value as CharacterData.Success).data
+            )
+
         }
     }
 
@@ -53,7 +81,6 @@ internal class CharacterListViewModelTest : BaseTest() {
         runBlocking {
             setUpTestSubject()
             whenever(repository.getCharacters()).thenReturn(characterList)
-            subject.fetchCharacters()
             subject.queryCharacters("Idris")
 
             assertEquals(
@@ -69,6 +96,6 @@ internal class CharacterListViewModelTest : BaseTest() {
         val testDispatcher = AppDispatchers(
             IO = UnconfinedTestDispatcher()
         )
-        subject = CharacterListViewModel(repository, testDispatcher)
+        subject = CharacterListViewModel(repository, testDispatcher, characterList)
     }
 }

@@ -16,6 +16,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
+import com.sample.wireviewer.model.Character
 
 @OptIn(ExperimentalSerializationApi::class)
 @Module
@@ -29,6 +30,9 @@ class AppModule {
 
     @Provides
     fun provideDispatchers(): AppDispatchers = AppDispatchers()
+
+    @Provides
+    fun providesCharacterCache(): MutableList<Character> = mutableListOf()
 
     @Provides
     @Singleton
