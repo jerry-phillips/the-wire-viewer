@@ -21,12 +21,12 @@ internal class CharacterListRepositoryTest : BaseTest() {
         val requestData = RequestData(characterList)
         val subject = CharacterListRepository(duckGoService)
         runBlocking {
-            whenever(duckGoService.getWireCharacters(WIREQUERY, DATAFORMAT)).thenReturn(response)
+            whenever(duckGoService.getWireCharacters("the wire characters", "json")).thenReturn(response)
             whenever(response.body()).thenReturn(requestData)
             whenever(response.isSuccessful).thenReturn(true)
             val result = subject.getCharacters()
 
-            verify(duckGoService).getWireCharacters(WIREQUERY, DATAFORMAT)
+            verify(duckGoService).getWireCharacters("the wire characters", "json")
             assertEquals(characterList, result)
         }
     }

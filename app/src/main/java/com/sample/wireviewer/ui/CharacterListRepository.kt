@@ -5,8 +5,8 @@ import com.sample.wireviewer.services.DuckDuckGoService
 import javax.inject.Inject
 import kotlin.jvm.Throws
 
-const val WIREQUERY = "the wire characters"
-const val DATAFORMAT = "json"
+private const val WIREQUERY = "the wire characters"
+private const val DATAFORMAT = "json"
 
 class CharacterListRepository @Inject constructor(private val duckGoService: DuckDuckGoService) {
 
