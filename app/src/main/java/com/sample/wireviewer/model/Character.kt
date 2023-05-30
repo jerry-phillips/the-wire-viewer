@@ -9,9 +9,6 @@ data class Character(
     @SerialName("Icon") val icon: Icon? = null,
     @SerialName("Text") val text: String? = null
 ) {
-
-
-
     companion object {
         fun getCharacterName(text: String?): String? {
             val separated =

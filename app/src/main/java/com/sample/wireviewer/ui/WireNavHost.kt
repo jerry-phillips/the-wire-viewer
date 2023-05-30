@@ -33,7 +33,9 @@ fun Navigate() {
             }
             CharacterListView(viewModel, navigateToDestination)
         }
+
         composable(route = "${Screen.CharacterDetailScreen.route}/{url}/{text}",
+
             arguments = listOf(
                 navArgument("url") {
                     type = NavType.StringType
@@ -45,23 +47,27 @@ fun Navigate() {
                 }
             ),
             enterTransition = { -> slideInHorizontally(animationSpec = tween(500)) },
-            exitTransition = { -> slideOutHorizontally(animationSpec = tween(
-                500)) }){ entry ->
+            exitTransition = { -> slideOutHorizontally(animationSpec = tween(500)) }
+        )
+        { entry ->
             val hasBackStackEntry = navigationController.previousBackStackEntry != null
 
             CharacterDetailView(
                 hasBackStackEntry = hasBackStackEntry,
                 navigateToDestination = { navigationController.navigateUp() },
                 url = entry.arguments?.getString("url"),
-                text = entry.arguments?.getString("text"))
+                text = entry.arguments?.getString("text")
+            )
         }
+
     }
 }
 
 private const val CHARACTERLISTSCREEN = "characterlistscreen"
 private const val CHARATERDETAILSCREEN = "characterdetailview"
+
 sealed class Screen(val route: String) {
-    object CharacterListScreen: Screen(CHARACTERLISTSCREEN)
-    object CharacterDetailScreen: Screen(CHARATERDETAILSCREEN)
+    object CharacterListScreen : Screen(CHARACTERLISTSCREEN)
+    object CharacterDetailScreen : Screen(CHARATERDETAILSCREEN)
 
 }
