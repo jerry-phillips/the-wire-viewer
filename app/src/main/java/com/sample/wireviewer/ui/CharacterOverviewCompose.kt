@@ -45,7 +45,7 @@ fun CharacterListView(viewModel: CharacterListViewModel, onItemClick: (String?, 
                     ShowMessageDialog(message = R.string.no_data)
                 }
                 is CharacterData.Empty -> {
-                    ShowProgessView()
+                    ShowProgressView()
                 }
                 is CharacterData.Success -> {
                     val modifier = Modifier.fillMaxSize().padding(innerPadding)

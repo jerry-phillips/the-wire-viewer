@@ -19,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.sample.wireviewer.R
 
@@ -38,7 +37,7 @@ fun SetImage(size: Dp, url: String?) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StandardTopAppBar(hasBackStackEntry: Boolean, navigateback: () -> Unit, @StringRes stringResource: Int?) {
+fun StandardTopAppBar(hasBackStackEntry: Boolean, navigateBack: () -> Unit, @StringRes stringResource: Int?) {
     TopAppBar(title = {
         Text(
             text = stringResource(id = stringResource ?: R.string.empty),
@@ -46,21 +45,19 @@ fun StandardTopAppBar(hasBackStackEntry: Boolean, navigateback: () -> Unit, @Str
         )
     }, navigationIcon = {
         if (hasBackStackEntry) {
-            IconButton(onClick = { navigateback.invoke() }) {
+            IconButton(onClick = { navigateBack.invoke() }) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "Back",
                 )
             }
-        } else {
-            null
         }
     }
     )
 }
 
 @Composable
-fun ShowProgessView() {
+fun ShowProgressView() {
     Box(
         modifier = Modifier
             .fillMaxSize()

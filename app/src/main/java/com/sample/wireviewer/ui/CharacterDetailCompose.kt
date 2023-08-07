@@ -25,7 +25,7 @@ fun CharacterDetailView(
         Scaffold(
             topBar = { StandardTopAppBar(
                 hasBackStackEntry = hasBackStackEntry,
-                navigateback = navigateToDestination,
+                navigateBack = navigateToDestination,
                 stringResource = null) }
         ) { innerPadding ->
             Column(

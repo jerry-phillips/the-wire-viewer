@@ -92,7 +92,6 @@ fun CollapsedSearchView(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExpandedSearchView(
     searchDisplay: String,
@@ -130,7 +129,11 @@ fun ExpandedSearchView(
         }
         TextField(
             value = textFieldValue,
-            colors = TextFieldDefaults.textFieldColors(containerColor = MaterialTheme.colorScheme.onPrimary),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.onPrimary,
+                unfocusedContainerColor = MaterialTheme.colorScheme.onPrimary,
+                disabledContainerColor = MaterialTheme.colorScheme.onPrimary,
+            ),
             onValueChange = {
                 textFieldValue = it
                 onSearchDisplayChanged(it.text)

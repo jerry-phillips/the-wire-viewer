@@ -9,7 +9,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,8 +30,8 @@ class CharacterListViewModel @Inject constructor(
     }
 
     fun fetchCharacters() {
-        viewModelScope.launch {
-            _characters.value = withContext(appDispatchers.IO) {
+        viewModelScope.launch(appDispatchers.IO) {
+            _characters.value =
                 try {
                     val characters = characterListRepository.getCharacters()
                     if (!characters.isNullOrEmpty()) {
@@ -44,7 +43,6 @@ class CharacterListViewModel @Inject constructor(
                 } catch (e: Exception) {
                     CharacterData.Error
                 }
-            }
         }
     }
 

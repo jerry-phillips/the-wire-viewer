@@ -46,8 +46,8 @@ fun Navigate() {
                     defaultValue = ""
                 }
             ),
-            enterTransition = { -> slideInHorizontally(animationSpec = tween(500)) },
-            exitTransition = { -> slideOutHorizontally(animationSpec = tween(500)) }
+            enterTransition = { slideInHorizontally(animationSpec = tween(500)) },
+            exitTransition = { slideOutHorizontally(animationSpec = tween(500)) }
         )
         { entry ->
             val hasBackStackEntry = navigationController.previousBackStackEntry != null
@@ -63,11 +63,12 @@ fun Navigate() {
     }
 }
 
-private const val CHARACTERLISTSCREEN = "characterlistscreen"
-private const val CHARATERDETAILSCREEN = "characterdetailview"
+private const val CHARACTER_LIST_SCREEN = "characterlistscreen"
+private const val CHARACTER_DETAIL_SCREEN = "characterdetailview"
 
-sealed class Screen(val route: String) {
-    object CharacterListScreen : Screen(CHARACTERLISTSCREEN)
-    object CharacterDetailScreen : Screen(CHARATERDETAILSCREEN)
+sealed class Screen(val route:
+                    String) {
+    object CharacterListScreen : Screen(CHARACTER_LIST_SCREEN)
+    object CharacterDetailScreen : Screen(CHARACTER_DETAIL_SCREEN)
 
 }
